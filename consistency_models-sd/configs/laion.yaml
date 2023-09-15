@@ -1,0 +1,21 @@
+train_dataloader:
+  - target: cm.yt.dataloader.IterableDataloader
+    params:
+      name: train_orig
+      batch_size: 1
+      dataset:
+        target: cm.yt.yt_iterable_dataset.IterableYTDataset
+        params:
+          table: //home/cvtest/mathemage/laion_512
+      preprocess:
+        - in_map:
+            image_bytes: image_512
+          target: cm.yt.processing.process_fns.decode_image_pipeline
+          out_map: image
+        - in_map:
+            string: text
+          target: cm.yt.processing.process_fns.string_decode
+      stackable:
+        - image
+      non_stackable:
+        - text
