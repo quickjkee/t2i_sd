@@ -460,7 +460,6 @@ class CMTrainLoop(TrainLoop):
             local_text_idxs = []
             logger.info(f"Generating coco samples for ema {ema_rate}...")
             rank_batches, rank_batches_index = self.eval_pipe.coco_prompts
-            print(len(rank_batches))
             for cnt, mini_batch in enumerate(tqdm(rank_batches, unit='batch', disable=(dist.get_rank() != 0))):
                 text = list(mini_batch)
                 if num_inference_steps in [1, 50]:
