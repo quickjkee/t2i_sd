@@ -1,4 +1,4 @@
-export OPENAI_LOGDIR="/extra_disk_1/quickjkee/results_tmp_tmp2"
+export OPENAI_LOGDIR="tmp"
 echo $OPENAI_LOGDIR
 
 export CUDA_VISIBLE_DEVICES=3
@@ -16,7 +16,7 @@ python3.9 -m torch.distributed.run --standalone --nproc_per_node=1 --master-addr
    --total_training_steps 200 \
    --loss_norm l2 \
    --lr_anneal_steps 0 \
-   --teacher_model_path /extra_disk_1/dbaranchuk/dpms/pretrained/sd-v1-5 \
+   --teacher_model_path $INPUT_PATH/needed/pretrained/sd-v1-5 \
    --ema_rate 0.9999 \
    --global_batch_size 1 \
    --lr 0.0008 \
@@ -27,11 +27,11 @@ python3.9 -m torch.distributed.run --standalone --nproc_per_node=1 --master-addr
    --weight_schedule uniform \
    --coco_train_path coco/coco \
    --coco_max_cnt 16 \
-   --resume_checkpoint /extra_disk_1/dbaranchuk/laion_67_bs240/model75000.pt \
+   --resume_checkpoint $INPUT_PATH/needed/model75000.pt \
    --steps 6
    # prev lr 0.000008 # ,0.9999432189950708
 
 CUDA_VISIBLE_DEVICES=0 python3.9 calc_metrics.py \
-   --folder /extra_disk_1/quickjkee/results_tmp_tmp/samples_75000_steps_6_ema_0.9999/
+   --folder tmp/samples_75000_steps_6_ema_0.9999/
 
 

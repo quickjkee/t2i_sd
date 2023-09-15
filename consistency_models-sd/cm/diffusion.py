@@ -393,7 +393,7 @@ class DenoiserSD:
         num_scales=50,
         num_inference_steps=3
     ):
-        torch.manual_seed(0)
+        torch.manual_seed(dist.get_rank())
         height = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
         width = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
 

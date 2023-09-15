@@ -111,18 +111,19 @@ def main():
     if args.dataset == 'laion':
         data = instantiate_from_config(config['train_dataloader'][0])
     elif args.dataset == 'coco':
-        from torchvision import transforms
-        transform = transforms.Compose([
-            transforms.Resize(512),
-            transforms.RandomCrop(512),
-            transforms.ToTensor(),
-            lambda x: 2 * x - 1
-        ])
-        dataset = COCODataset(args.coco_train_path, subset_name='train2014', transform=transform)
-        dataset_sampler = InfiniteSampler(dataset=dataset, rank=dist.get_rank(), num_replicas=dist.get_world_size(), seed=0)
-        data = iter(th.utils.data.DataLoader(
-            dataset=dataset, sampler=dataset_sampler, batch_size=batch_size)
-        )
+        data = None
+        #from torchvision import transforms
+        #transform = transforms.Compose([
+        #    transforms.Resize(512),
+        #    transforms.RandomCrop(512),
+        #    transforms.ToTensor(),
+        #    lambda x: 2 * x - 1
+        #])
+        #dataset = COCODataset(args.coco_train_path, subset_name='train2014', transform=transform)
+        #dataset_sampler = InfiniteSampler(dataset=dataset, rank=dist.get_rank(), num_replicas=dist.get_world_size(), seed=0)
+        #data = iter(th.utils.data.DataLoader(
+        #    dataset=dataset, sampler=dataset_sampler, batch_size=batch_size)
+        #)
     else:
         raise(f"Unsupported dataset {args.dataset}...")
     
