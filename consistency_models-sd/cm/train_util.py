@@ -136,7 +136,8 @@ class TrainLoop:
 
     def _load_and_sync_parameters(self):
         if dist.get_rank() == 0:
-            copy_snapshot_to_out(get_blob_logdir())
+            pass
+            # copy_snapshot_to_out(get_blob_logdir())
         dist.barrier()
         resume_checkpoint = find_resume_checkpoint() or self.resume_checkpoint
 
