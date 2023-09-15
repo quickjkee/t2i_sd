@@ -20,5 +20,5 @@ folder = conf.folder
 aesth = calculate_aesthetic_given_paths((0, folder), 50000)
 print(f'Aesthetic {aesth}')
 
-fid = calculate_fid_given_paths((folder, 'evaluations/fid_stats_mscoco512_val.npz'),'cuda')
+fid = calculate_fid_given_paths((folder, 'evaluations/fid_stats_mscoco512_val.npz'), 'cuda')
 print(f'Fid {fid}')
