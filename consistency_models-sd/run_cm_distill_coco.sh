@@ -16,7 +16,7 @@ python3.9 -m torch.distributed.run --standalone --nproc_per_node=1 --master-addr
    --total_training_steps 200 \
    --loss_norm l2 \
    --lr_anneal_steps 0 \
-   --teacher_model_path $INPUT_PATH/needed/pretrained/sd-v1-5 \
+   --teacher_model_path $INPUT_PATH/needed/sd-v1-5 \
    --ema_rate 0.9999 \
    --global_batch_size 1 \
    --lr 0.0008 \
