@@ -29,3 +29,7 @@ for step in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
                      --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
                      --steps {step}',
                     shell=True)
+
+    subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3.9 calc_metrics.py \
+                    --folder tmp/samples_75000_steps_6_ema_0.9999/',
+                    shell=True)
