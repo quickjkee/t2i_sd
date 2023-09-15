@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export OPENAI_LOGDIR="tmp"
 echo $OPENAI_LOGDIR
 echo $INPUT_PATH
