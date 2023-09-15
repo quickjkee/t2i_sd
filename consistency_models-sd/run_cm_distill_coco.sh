@@ -1,7 +1,7 @@
 export OPENAI_LOGDIR="tmp"
 echo $OPENAI_LOGDIR
 
-export CUDA_VISIBLE_DEVICES=3
+export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8
 export OMP_NUM_THREADS=1
 
 # mpiexec -n 2 python scripts/cm_train.py \
