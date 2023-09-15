@@ -51,6 +51,7 @@ def prepare_coco_prompts(path, bs=20, max_cnt=10000):
     rank_batches = all_batches[dist.get_rank():: dist.get_world_size()] 
 
     index_list = np.arange(len(all_text))
+    print(len(index_list))
     all_batches_index = np.array_split(index_list, num_batches)
     rank_batches_index = all_batches_index[dist.get_rank():: dist.get_world_size()]
     return rank_batches, rank_batches_index
@@ -215,7 +216,7 @@ def create_argparser():
         dataset='laion', 
         laion_config="configs/laion.yaml",
         coco_train_path=".",
-        coco_path="evaluations/coco_subset.csv",
+        coco_path="subset_30k.csv",
         weight_schedule='uniform',
         teacher_dropout=0.0,
         guidance_scale=8.0,
