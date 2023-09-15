@@ -2,8 +2,18 @@
 Train a diffusion model on images.
 """
 import sys
-sys.path.append('/home/quickjkee//consistency_models-sd')
-sys.path.append('/home/quickjkee//consistency_models-sd/cm')
+import os
+
+# Necessary stuff
+######################################################
+SOURCE_CODE_PATH = os.environ['SOURCE_CODE_PATH']
+INPUT_PATH = os.environ['INPUT_PATH']
+
+sys.path.append(f'{SOURCE_CODE_PATH}/t2i_sd')
+sys.path.append(f'{SOURCE_CODE_PATH}/t2i_sd/consistency_models-sd')
+sys.path.append(f'{SOURCE_CODE_PATH}/t2i_sd/consistency_models-sd/cm')
+sys.path.append(f'{SOURCE_CODE_PATH}/t2i_sd/consistency_models-sd/scripts')
+######################################################
 
 import argparse
 import torch as th
