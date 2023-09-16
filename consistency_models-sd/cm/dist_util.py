@@ -181,7 +181,7 @@ def get_rank():
     return th.distributed.get_rank() if th.distributed.is_initialized() else 0
 
 def get_seed():
-    return th.distributed.get_rank() + 2 if th.distributed.is_initialized() else 0
+    return th.distributed.get_rank() + 3 if th.distributed.is_initialized() else 0
 
 
 def get_world_size():
