@@ -448,7 +448,7 @@ class CMTrainLoop(TrainLoop):
         # Setup seed equalt ot the world rank
         init_t = [981]
         for i in range(4):
-            next_t = random.randint(init_t[i] - 1, 50)
+            next_t = random.randint(50, init_t[i] - 1)
             init_t.append(next_t)
         init_t.append(1)
         timesteps = th.tensor(init_t, device='cuda') # extremely hard code
