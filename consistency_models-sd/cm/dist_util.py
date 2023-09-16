@@ -180,6 +180,9 @@ def sync_params(params):
 def get_rank():
     return th.distributed.get_rank() if th.distributed.is_initialized() else 0
 
+def get_seed():
+    return th.distributed.get_rank() + 1 if th.distributed.is_initialized() else 0
+
 
 def get_world_size():
     return th.distributed.get_world_size() if th.distributed.is_initialized() else 1

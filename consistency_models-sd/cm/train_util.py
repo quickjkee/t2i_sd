@@ -447,8 +447,8 @@ class CMTrainLoop(TrainLoop):
         # Setup seed equalt ot the world rank
         for ema_rate, params in zip(self.ema_rate, self.ema_params):
             # Setup seed equalt ot the world rank
-            generator = th.Generator(device="cuda").manual_seed(dist.get_rank())
-            th.manual_seed(dist.get_rank())
+            generator = th.Generator(device="cuda").manual_seed(dist.get_seed())
+            th.manual_seed(dist.get_seed())
 
             # Load ema params to the model
             ema_state_dict = self.mp_trainer.master_params_to_state_dict(params)

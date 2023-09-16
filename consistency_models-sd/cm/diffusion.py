@@ -110,7 +110,7 @@ class DenoiserSD:
 
         self.generator = torch.Generator(
             device=self.pipe._execution_device
-        ).manual_seed(dist.get_rank())
+        ).manual_seed(dist.get_seed())
 
     def consistency_losses(
         self,
@@ -393,7 +393,7 @@ class DenoiserSD:
         num_scales=50,
         num_inference_steps=3
     ):
-        torch.manual_seed(dist.get_rank())
+        torch.manual_seed(dist.get_seed())
         height = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
         width = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
 
