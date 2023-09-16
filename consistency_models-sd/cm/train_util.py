@@ -11,6 +11,7 @@ from torch.optim import RAdam
 
 import numpy as np
 import copy
+import random
 import cm.dist_util as dist
 import cm.logger as logger
 from .fp16_util import MixedPrecisionTrainer
@@ -445,6 +446,13 @@ class CMTrainLoop(TrainLoop):
         self.model.eval()
 
         # Setup seed equalt ot the world rank
+        init_t = [981]
+        for i in range(4):
+            next_t = random.randint(init_t[i] - 1, 50)
+            init_t.append(next_t)
+        init_t.append(1)
+        timesteps = th.tensor(init_t, device='cuda') # extremely hard code
+        logger.log(f'CURRENT TIMESTEPS {timesteps}')
         for ema_rate, params in zip(self.ema_rate, self.ema_params):
             # Setup seed equalt ot the world rank
             generator = th.Generator(device="cuda").manual_seed(dist.get_seed())
@@ -475,7 +483,8 @@ class CMTrainLoop(TrainLoop):
                     image = self.diffusion.stochastic_iterative_sampler(
                         self.eval_pipe,
                         text, 
-                        generator=generator, 
+                        generator=generator,
+                        timesteps=timesteps,
                         num_inference_steps=num_inference_steps, 
                         guidance_scale=self.guidance_scale
                     )

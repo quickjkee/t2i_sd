@@ -389,6 +389,7 @@ class DenoiserSD:
         prompt,
         generator,
         ts=None,
+        timesteps=None,
         guidance_scale=8.0,
         num_scales=50,
         num_inference_steps=3
@@ -424,17 +425,18 @@ class DenoiserSD:
 
         # 4. Sample timesteps uniformly (first step is 981)
         self.scheduler.set_timesteps(num_scales, device=device)
-        self.scheduler.alphas_cumprod = self.scheduler.alphas_cumprod.to(device) 
-        if num_inference_steps == num_scales:
-            timesteps = self.scheduler.timesteps
-        elif ts is None:
-            step = num_scales / num_inference_steps
-            step_ids = torch.arange(0, num_scales, step).to(int)
-            timesteps = self.scheduler.timesteps[step_ids]
-            timesteps = torch.cat([timesteps, self.scheduler.timesteps[-1:]])
-        else:
-            timesteps = self.scheduler.timesteps[ts]
-        #timesteps = torch.tensor([981, 850, 650, 400, 250, 150, 1], device=device) # extremely hard code
+        self.scheduler.alphas_cumprod = self.scheduler.alphas_cumprod.to(device)
+
+        if timesteps is None:
+            if num_inference_steps == num_scales:
+                timesteps = self.scheduler.timesteps
+            elif ts is None:
+                step = num_scales / num_inference_steps
+                step_ids = torch.arange(0, num_scales, step).to(int)
+                timesteps = self.scheduler.timesteps[step_ids]
+                timesteps = torch.cat([timesteps, self.scheduler.timesteps[-1:]])
+            else:
+                timesteps = self.scheduler.timesteps[ts]
 
         assert len(timesteps) == num_inference_steps + 1
         # 5. Prepare latent variables
