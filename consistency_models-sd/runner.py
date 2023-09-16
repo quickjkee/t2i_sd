@@ -4,7 +4,7 @@ import os
 SOURCE_CODE_PATH = os.environ['SOURCE_CODE_PATH']
 INPUT_PATH = os.environ['INPUT_PATH']
 
-for step in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
+for step in [5]:
     subprocess.call(f'python3 -m torch.distributed.run --standalone --nproc_per_node=1 --master-addr=0.0.0.0:1207 scripts/cm_train.py \
                      --training_mode consistency_distillation \
                      --target_ema_mode fixed \
