@@ -1,12 +1,24 @@
 import subprocess
 import os
+import nirvana_dl
+
+# Utils
+# ----------------------------------------------------------
+def get_blob_logdir():
+    # You can change this to be a separate path to save checkpoints to
+    # a blobstore or some external drive.
+    snapshot_path = nirvana_dl.snapshot.get_snapshot_path()
+    nirvana_dl.snapshot.dump_snapshot(snapshot_path)
+    return snapshot_path
+# ----------------------------------------------------------
 
 SOURCE_CODE_PATH = os.environ['SOURCE_CODE_PATH']
 INPUT_PATH = os.environ['INPUT_PATH']
+OUTPUT_PATH = get_blob_logdir()
 
-for step in [5]:
-    for ref_step in [5]: #5, 10, 15, 25, 35, 45
-        for rollback_v in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]:
+for step in [5, 6]:
+    for ref_step in [0]: #5, 10, 15, 25, 35, 45
+        for rollback_v in [0.1]: #[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]:
             print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
             subprocess.call(f'python3 -m torch.distributed.run --standalone --nproc_per_node=1 --master-addr=0.0.0.0:1207 scripts/cm_train.py \
                              --training_mode consistency_distillation \
@@ -38,6 +50,14 @@ for step in [5]:
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
                             --folder tmp/samples_75000_steps_{step}_ema_0.9999/',
                             shell=True)
+
+            subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
+                            --nproc_per_node=8 metrics/main_no_faiss.py \
+                            --sample_path tmp/samples_75000_steps_{step}_ema_0.9999/ \
+                            --real_feature_path {INPUT_PATH}/dinov2_vitl14_laion_10M_features.pt \
+                            --bs 256 \
+                            --save_path hz \
+                            ')
 
     print('============================================================================================')
     print('============================================================================================')
