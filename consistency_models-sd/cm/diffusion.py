@@ -480,7 +480,7 @@ class DenoiserSD:
                 sqrt_alpha_prod = self.scheduler.alphas_cumprod[next_t] ** 0.5
                 sqrt_one_minus_alpha_prod = (1 - self.scheduler.alphas_cumprod[next_t]) ** 0.5
 
-                noise = torch.randn(latents.size(), generator=generator.cpu())
+                noise = torch.randn(latents.size(), generator=generator.to('cpu'))
                 latents = sqrt_alpha_prod * x0 + sqrt_one_minus_alpha_prod * noise
 
                 # call the callback, if provided
