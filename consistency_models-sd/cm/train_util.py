@@ -491,7 +491,7 @@ class CMTrainLoop(TrainLoop):
                         guidance_scale=self.guidance_scale
                     )
                 else:
-                    image, x0_latents = self.diffusion.stochastic_iterative_sampler(
+                    image, x0_latents, prompt_embeds = self.diffusion.stochastic_iterative_sampler(
                         self.eval_pipe,
                         text, 
                         generator=generator,
@@ -503,7 +503,7 @@ class CMTrainLoop(TrainLoop):
                 if num_refining_steps:
                     image = self.diffusion.refining(
                         eval_pipe=refiner_pipe,
-                        prompt=text,
+                        prompt_embeds=prompt_embeds,
                         x0_latents=x0_latents,
                         generator=generator_refining,
                         num_inference_steps=num_refining_steps,

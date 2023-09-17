@@ -487,49 +487,27 @@ class DenoiserSD:
                 # call the callback, if provided
                 progress_bar.update()
 
-        image = eval_pipe.vae.decode(latents / eval_pipe.vae.config.scaling_factor, return_dict=False)[0]
-        do_denormalize = [True] * image.shape[0]
-        image = eval_pipe.image_processor.postprocess(image, output_type="pil", do_denormalize=do_denormalize)
-        return image, latents
+        #image = eval_pipe.vae.decode(latents / eval_pipe.vae.config.scaling_factor, return_dict=False)[0]
+        #do_denormalize = [True] * image.shape[0]
+        #image = eval_pipe.image_processor.postprocess(image, output_type="pil", do_denormalize=do_denormalize)
+        return None, latents, prompt_embeds
 
     @torch.no_grad()
     def refining(self,
                  eval_pipe,
-                 prompt,
+                 prompt_embeds,
                  x0_latents,
                  rollback_value=0.3,
                  generator=None,
                  num_inference_steps=50,
                  guidance_scale=8.0,
                  ):
-
-        height = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
-        width = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
-
-        # 1. Check inputs. Raise error if not correct
-        eval_pipe.check_inputs(
-            prompt, height, width, 1, None, None, None
-        )
-
-        # 2. Define call parameters
-        if prompt is not None and isinstance(prompt, str):
-            batch_size = 1
-        elif prompt is not None and isinstance(prompt, list):
-            batch_size = len(prompt)
-
         device = eval_pipe._execution_device
 
         # here `guidance_scale` is defined analog to the guidance weight `w` of equation (2)
         # of the Imagen paper: https://arxiv.org/pdf/2205.11487.pdf . `guidance_scale = 1`
         # corresponds to doing no classifier free guidance.
         do_classifier_free_guidance = guidance_scale > 1.0
-
-        prompt_embeds = eval_pipe._encode_prompt(
-            prompt,
-            device,
-            1,
-            do_classifier_free_guidance
-        )
 
         # 4. Sample timesteps uniformly (first step is 981)
         timesteps = torch.linspace(int(rollback_value * 1000), 1, steps=num_inference_steps + 1,
