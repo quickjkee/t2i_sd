@@ -453,6 +453,9 @@ class CMTrainLoop(TrainLoop):
         timesteps = th.tensor([981, 669, 505, 280, 272,   1], device='cuda')  # extremely hard code
         logger.log(f'CURRENT TIMESTEPS {timesteps}')
 
+        if num_refining_steps:
+            logger.log(f'Refining with {rollback_value}')
+
         for ema_rate, params in zip(self.ema_rate, self.ema_params):
             # Setup seed equalt ot the world rank
             generator = th.Generator(device="cuda").manual_seed(dist.get_seed())
