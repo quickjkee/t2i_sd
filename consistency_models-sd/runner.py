@@ -22,7 +22,8 @@ torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 
 for step in [6]:
     for ref_step in [10]: #5, 10, 15, 25, 35, 45
-        for rollback_v in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]:
+        for rollback_v in [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5,
+                           0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]:
             print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
                              --nproc_per_node=8 --master-addr=0.0.0.0:1207 scripts/cm_train.py \
