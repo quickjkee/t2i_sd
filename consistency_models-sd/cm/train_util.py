@@ -233,6 +233,7 @@ class CMTrainLoop(TrainLoop):
                 )
 
         if teacher_model:
+            self.teacher_model_params = list(self.teacher_model.parameters())
             self._load_and_sync_teacher_parameters()
             self.teacher_model.requires_grad_(False)
             self.teacher_model.eval()
@@ -441,7 +442,7 @@ class CMTrainLoop(TrainLoop):
         self.timer = time.time()
 
     @th.no_grad()
-    def generate_coco(self, num_inference_steps=3):
+    def generate_coco(self, num_inference_steps=3, num_refining_steps=0):
         prev_state_dict = self.model.state_dict()
         self.model.eval()
 
@@ -452,12 +453,20 @@ class CMTrainLoop(TrainLoop):
         for ema_rate, params in zip(self.ema_rate, self.ema_params):
             # Setup seed equalt ot the world rank
             generator = th.Generator(device="cuda").manual_seed(dist.get_seed())
+            generator_refining = th.Generator(device="cuda").manual_seed(dist.get_seed()) if num_refining_steps else None
+
             th.manual_seed(dist.get_seed())
 
             # Load ema params to the model
             ema_state_dict = self.mp_trainer.master_params_to_state_dict(params)
             self.eval_pipe.unet.load_state_dict(ema_state_dict)
             assert not self.eval_pipe.unet.training
+
+            if num_refining_steps:
+                refiner_pipe = copy.deepcopy(self.eval_pipe)
+                params = self.teacher_model_params
+                refiner_state_dict = self.mp_trainer.master_params_to_state_dict(params)
+                refiner_pipe.eval_pipe.unet.load_state_dict(refiner_state_dict)
 
             dist.barrier()
             
@@ -476,13 +485,24 @@ class CMTrainLoop(TrainLoop):
                         guidance_scale=self.guidance_scale
                     )
                 else:
-                    image = self.diffusion.stochastic_iterative_sampler(
+                    image, x0_latents = self.diffusion.stochastic_iterative_sampler(
                         self.eval_pipe,
                         text, 
                         generator=generator,
                         timesteps=timesteps,
                         num_inference_steps=num_inference_steps, 
                         guidance_scale=self.guidance_scale
+                    )
+
+                if num_refining_steps:
+                    image = self.diffusion.refining(
+                        eval_pipe=refiner_pipe,
+                        prompt=text,
+                        latents=x0_latents,
+                        generator=generator_refining,
+                        num_inference_steps=5,
+                        guidance_scale=self.guidance_scale,
+                        rollback_value=0.3,  # [0, 1]
                     )
 
                 for text_idx, global_idx in enumerate(rank_batches_index[cnt]):

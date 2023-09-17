@@ -394,7 +394,6 @@ class DenoiserSD:
         num_scales=50,
         num_inference_steps=3
     ):
-        torch.manual_seed(dist.get_seed())
         height = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
         width = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
 
@@ -439,6 +438,7 @@ class DenoiserSD:
                 timesteps = self.scheduler.timesteps[ts]
 
         assert len(timesteps) == num_inference_steps + 1
+
         # 5. Prepare latent variables
         num_channels_latents = eval_pipe.unet.config.in_channels
         latents = eval_pipe.prepare_latents(
@@ -480,9 +480,94 @@ class DenoiserSD:
                 sqrt_alpha_prod = self.scheduler.alphas_cumprod[next_t] ** 0.5
                 sqrt_one_minus_alpha_prod = (1 - self.scheduler.alphas_cumprod[next_t]) ** 0.5
 
-                noise = torch.randn_like(latents)
+                noise = torch.randn_like(latents, generator=generator)
                 latents = sqrt_alpha_prod * x0 + sqrt_one_minus_alpha_prod * noise
 
+                # call the callback, if provided
+                progress_bar.update()
+
+        image = eval_pipe.vae.decode(latents / eval_pipe.vae.config.scaling_factor, return_dict=False)[0]
+        do_denormalize = [True] * image.shape[0]
+        image = eval_pipe.image_processor.postprocess(image, output_type="pil", do_denormalize=do_denormalize)
+        return image, latents
+
+    @torch.no_grad()
+    def refining(self,
+                 eval_pipe,
+                 prompt,
+                 x0_latents,
+                 rollback_value=0.3,
+                 generator=None,
+                 num_inference_steps=50,
+                 guidance_scale=8.0,
+                 ):
+
+        height = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
+        width = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
+
+        # 1. Check inputs. Raise error if not correct
+        eval_pipe.check_inputs(
+            prompt, height, width, 1, None, None, None
+        )
+
+        # 2. Define call parameters
+        if prompt is not None and isinstance(prompt, str):
+            batch_size = 1
+        elif prompt is not None and isinstance(prompt, list):
+            batch_size = len(prompt)
+
+        device = eval_pipe._execution_device
+
+        # here `guidance_scale` is defined analog to the guidance weight `w` of equation (2)
+        # of the Imagen paper: https://arxiv.org/pdf/2205.11487.pdf . `guidance_scale = 1`
+        # corresponds to doing no classifier free guidance.
+        do_classifier_free_guidance = guidance_scale > 1.0
+
+        prompt_embeds = eval_pipe._encode_prompt(
+            prompt,
+            device,
+            1,
+            do_classifier_free_guidance
+        )
+
+        # 4. Sample timesteps uniformly (first step is 981)
+        timesteps = torch.linspace(int(rollback_value * 1000), 1, steps=num_inference_steps + 1, device=device)
+        assert len(timesteps) == num_inference_steps + 1
+
+        # 5. Prepare latent variables
+        rollback_timestep = torch.tensor([int(rollback_value * 1000)], device=device)
+        sqrt_alpha_prod = self.scheduler.alphas_cumprod[rollback_timestep] ** 0.5
+        sqrt_one_minus_alpha_prod = (1 - self.scheduler.alphas_cumprod[rollback_timestep]) ** 0.5
+
+        noise = torch.randn_like(x0_latents, generator=generator)
+        latents = sqrt_alpha_prod * x0_latents + sqrt_one_minus_alpha_prod * noise
+
+        with eval_pipe.progress_bar(total=num_inference_steps) as progress_bar:
+            for i, t in enumerate(timesteps):
+                # expand the latents if we are doing classifier free guidance
+                latent_model_input = torch.cat([latents] * 2) if do_classifier_free_guidance else latents
+                latent_model_input = eval_pipe.scheduler.scale_model_input(latent_model_input, t)
+
+                # predict the noise residual
+                noise_pred = eval_pipe.unet(
+                    latent_model_input,
+                    t,
+                    encoder_hidden_states=prompt_embeds,
+                    cross_attention_kwargs=None,
+                    return_dict=False,
+                )[0]
+
+                # perform guidance
+                if do_classifier_free_guidance:
+                    noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
+                    noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
+
+                # compute the previous noisy sample x_t -> x_t-1
+                if i == len(timesteps) - 1:
+                    t2 = torch.zeros_like(timesteps[i])
+                else:
+                    t2 = timesteps[i + 1]
+                latents = self.scheduler_step(noise_pred, t, t2, latents)
                 # call the callback, if provided
                 progress_bar.update()
 
