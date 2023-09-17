@@ -542,7 +542,7 @@ class DenoiserSD:
         sqrt_alpha_prod = self.scheduler.alphas_cumprod[rollback_timestep] ** 0.5
         sqrt_one_minus_alpha_prod = (1 - self.scheduler.alphas_cumprod[rollback_timestep]) ** 0.5
 
-        noise = torch.randn(x0_latents.size(), generator=generator)
+        noise = torch.randn(x0_latents.size())
         latents = sqrt_alpha_prod * x0_latents + sqrt_one_minus_alpha_prod * noise
 
         with eval_pipe.progress_bar(total=num_inference_steps) as progress_bar:
