@@ -28,7 +28,7 @@ for step in [5]:
                      --coco_max_cnt 5000 \
                      --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
                      --steps {step} \
-                     --refining_steps 0 \
+                     --refining_steps 5 \
                      --rollback_value 0.3',
                     shell=True)
 
