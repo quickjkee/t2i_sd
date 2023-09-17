@@ -13,6 +13,7 @@ import tempfile
 import warnings
 from collections import defaultdict
 from contextlib import contextmanager
+from cm import dist_util as dist
 
 DEBUG = 10
 INFO = 20
@@ -373,8 +374,9 @@ class Logger(object):
         return out
 
     def log(self, *args, level=INFO):
-        if self.level <= level:
-            self._do_log(args)
+        if dist.get_rank() == 0:
+            if self.level <= level:
+                self._do_log(args)
 
     # Configuration
     # ----------------------------------------
