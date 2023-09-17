@@ -504,7 +504,7 @@ class CMTrainLoop(TrainLoop):
                     image = self.diffusion.refining(
                         eval_pipe=refiner_pipe,
                         prompt=text,
-                        latents=x0_latents,
+                        x0_latents=x0_latents,
                         generator=generator_refining,
                         num_inference_steps=num_refining_steps,
                         guidance_scale=self.guidance_scale,
