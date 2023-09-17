@@ -446,13 +446,9 @@ class CMTrainLoop(TrainLoop):
         self.model.eval()
 
         # Setup seed equalt ot the world rank
-        init_t = [981]
-        for i in range(4):
-            next_t = random.randint(150, init_t[i] - 1)
-            init_t.append(next_t)
-        init_t.append(1)
-        timesteps = th.tensor(init_t, device='cuda') # extremely hard code
+        timesteps = th.tensor([981, 669, 505, 280, 272,   1], device='cuda')  # extremely hard code
         logger.log(f'CURRENT TIMESTEPS {timesteps}')
+
         for ema_rate, params in zip(self.ema_rate, self.ema_params):
             # Setup seed equalt ot the world rank
             generator = th.Generator(device="cuda").manual_seed(dist.get_seed())
