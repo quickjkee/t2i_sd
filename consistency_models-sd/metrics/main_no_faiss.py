@@ -46,6 +46,7 @@ def extract_features(loader, model):
     return features
     
 
+@torch.no_grad()
 def main():
     args = parser.parse_args()
     torch.set_num_threads(40)
@@ -94,7 +95,7 @@ def main():
         copy_out_to_snapshot(args.save_path)
 
     if dist.get_rank() == 0:
-        print(torch.mean(final_max_distances))
+        print(f'Mean dist {torch.mean(final_max_distances).cpu().item()}')
     
 
 if __name__ == '__main__':
