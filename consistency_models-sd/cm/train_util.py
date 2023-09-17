@@ -454,7 +454,7 @@ class CMTrainLoop(TrainLoop):
         logger.log(f'CURRENT TIMESTEPS {timesteps}')
 
         if num_refining_steps:
-            logger.log(f'Refining with {rollback_value}')
+            logger.log(f'Refining with rollback value {rollback_value} and steps {num_refining_steps}')
 
         for ema_rate, params in zip(self.ema_rate, self.ema_params):
             # Setup seed equalt ot the world rank
