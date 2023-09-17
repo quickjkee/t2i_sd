@@ -442,7 +442,10 @@ class CMTrainLoop(TrainLoop):
         self.timer = time.time()
 
     @th.no_grad()
-    def generate_coco(self, num_inference_steps=3, num_refining_steps=0):
+    def generate_coco(self, num_inference_steps=3,
+                            num_refining_steps=0,
+                            rollback_value=0.3):
+
         prev_state_dict = self.model.state_dict()
         self.model.eval()
 
