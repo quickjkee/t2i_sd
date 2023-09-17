@@ -52,12 +52,14 @@ def main():
     dist_util.init()
 
     # Extract DINOv2 features from generated samples
-    print('Loading DINOv2 ViT-L/14 model...')
+    if dist.get_rank() == 0:
+        print('Loading DINOv2 ViT-L/14 model...')
     dinov2_vitl14 = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
     dinov2_vitl14 = dinov2_vitl14.eval().to(dist_util.dev())
 
     loader = get_dinov2_loader(args.sample_path, batch_size=args.bs)
-    print(f'Extracting features from {args.sample_path}')
+    if dist.get_rank() == 0:
+        print(f'Extracting features from {args.sample_path}')
     fake_features = extract_features(loader, dinov2_vitl14)
 
     assert os.path.exists(args.real_feature_path)
@@ -66,7 +68,8 @@ def main():
     shard_real_features = real_features.split(shard_size)[dist.get_rank()].to(dist_util.dev())
 
     # Compute distances
-    print('Computing distances...')
+    if dist.get_rank() == 0:
+        print('Computing distances...')
     max_distances = (fake_features @ shard_real_features.T).max(-1, keepdim=True)[0]
     assert max_distances.shape[0] == len(fake_features) and max_distances.shape[1] == 1
     dist.barrier()
@@ -77,7 +80,8 @@ def main():
     final_max_distances = all_max_distances.max(-1)[0]
 
     # Save results
-    print(f"Saving results to {args.save_path}...")
+    if dist.get_rank() == 0:
+        print(f"Saving results to {args.save_path}...")
     if dist.get_rank() == 0:
         os.makedirs(args.save_path, exist_ok=True)
         torch.save(
@@ -88,7 +92,9 @@ def main():
             os.path.join(args.save_path, 'dinov2_distances.pt')
         )
         copy_out_to_snapshot(args.save_path)
-    print(torch.mean(final_max_distances))
+
+    if dist.get_rank() == 0:
+        print(torch.mean(final_max_distances))
     
 
 if __name__ == '__main__':
