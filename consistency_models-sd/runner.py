@@ -5,7 +5,7 @@ SOURCE_CODE_PATH = os.environ['SOURCE_CODE_PATH']
 INPUT_PATH = os.environ['INPUT_PATH']
 
 for step in [5]:
-    for ref_step in [10]: #5, 10, 15, 25, 35, 45
+    for ref_step in [25]: #5, 10, 15, 25, 35, 45
         for rollback_v in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]:
             print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
             subprocess.call(f'python3 -m torch.distributed.run --standalone --nproc_per_node=1 --master-addr=0.0.0.0:1207 scripts/cm_train.py \
