@@ -27,7 +27,9 @@ for step in [5]:
                      --coco_train_path coco/coco \
                      --coco_max_cnt 5000 \
                      --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
-                     --steps {step}',
+                     --steps {step} \
+                     --refining_steps 5 \
+                     --rollback_value 0.3',
                     shell=True)
 
     subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
