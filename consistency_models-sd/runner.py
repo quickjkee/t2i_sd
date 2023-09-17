@@ -1,6 +1,7 @@
 import subprocess
 import os
 import nirvana_dl
+import torch
 
 # Utils
 # ----------------------------------------------------------
@@ -15,6 +16,9 @@ def get_blob_logdir():
 SOURCE_CODE_PATH = os.environ['SOURCE_CODE_PATH']
 INPUT_PATH = os.environ['INPUT_PATH']
 OUTPUT_PATH = get_blob_logdir()
+
+# Try load first
+torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 
 for step in [3, 4, 5, 6]:
     for ref_step in [0]: #5, 10, 15, 25, 35, 45
