@@ -450,8 +450,10 @@ class CMTrainLoop(TrainLoop):
         self.model.eval()
 
         # Setup seed equalt ot the world rank
-        timesteps = th.tensor([981, 669, 505, 280, 272,   1], device='cuda')  # extremely hard code
-        logger.log(f'CURRENT TIMESTEPS {timesteps}')
+        #timesteps = th.tensor([981, 669, 505, 280, 272,   1], device='cuda')  # extremely hard code
+        #logger.log(f'CURRENT TIMESTEPS {timesteps}')
+
+        timesteps=None
 
         if num_refining_steps:
             logger.log(f'Refining with rollback value {rollback_value} and steps {num_refining_steps}')
