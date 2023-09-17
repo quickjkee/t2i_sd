@@ -396,6 +396,7 @@ class DenoiserSD:
     ):
         height = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
         width = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
+        torch.manual_seed(dist.get_seed())
 
         # 1. Check inputs. Raise error if not correct
         eval_pipe.check_inputs(
@@ -480,7 +481,7 @@ class DenoiserSD:
                 sqrt_alpha_prod = self.scheduler.alphas_cumprod[next_t] ** 0.5
                 sqrt_one_minus_alpha_prod = (1 - self.scheduler.alphas_cumprod[next_t]) ** 0.5
 
-                noise = torch.randn(latents.size(), generator=generator.to('cpu'))
+                noise = torch.randn(latents.size())
                 latents = sqrt_alpha_prod * x0 + sqrt_one_minus_alpha_prod * noise
 
                 # call the callback, if provided
@@ -504,6 +505,7 @@ class DenoiserSD:
 
         height = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
         width = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
+        torch.manual_seed(dist.get_seed() + 300)
 
         # 1. Check inputs. Raise error if not correct
         eval_pipe.check_inputs(
