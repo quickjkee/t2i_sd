@@ -21,7 +21,7 @@ OUTPUT_PATH = get_blob_logdir()
 torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 
 for step in [6]:
-    for ref_step in [15]: #5, 10, 15, 25, 35, 45
+    for ref_step in [25]: #5, 10, 15, 25, 35, 45
         for rollback_v in [0.3, 0.35, 0.4, 0.45, 0.5,
                            0.55, 0.6, 0.65, 0.7, 0.75, 0.8]:
             print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
