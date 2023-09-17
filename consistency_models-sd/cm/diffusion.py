@@ -531,7 +531,8 @@ class DenoiserSD:
         )
 
         # 4. Sample timesteps uniformly (first step is 981)
-        timesteps = torch.linspace(int(rollback_value * 1000), 1, steps=num_inference_steps + 1, device=device)
+        timesteps = torch.linspace(int(rollback_value * 1000), 1, steps=num_inference_steps + 1,
+                                   dtype=int, device=device)
         assert len(timesteps) == num_inference_steps + 1
 
         # 5. Prepare latent variables
