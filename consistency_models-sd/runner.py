@@ -59,7 +59,7 @@ for step in [6]:
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
                             --nproc_per_node=8 metrics/main_no_faiss.py \
                             --sample_path tmp/samples_75000_steps_{step}_ema_0.9999/ \
-                            --real_feature_path {INPUT_PATH}/dinov2_vitl14_laion_10M_features.pt \
+                            --real_feature_path {INPUT_PATH}/dinov2_vitl14_laion_1100K_features.pt \
                             --bs 256 \
                             --save_path hz \
                             ', shell=True)
