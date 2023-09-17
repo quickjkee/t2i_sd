@@ -392,7 +392,8 @@ class DenoiserSD:
         timesteps=None,
         guidance_scale=8.0,
         num_scales=50,
-        num_inference_steps=3
+        num_inference_steps=3,
+        with_refining=False,
     ):
         height = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
         width = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
@@ -486,11 +487,13 @@ class DenoiserSD:
 
                 # call the callback, if provided
                 progress_bar.update()
-
-        #image = eval_pipe.vae.decode(latents / eval_pipe.vae.config.scaling_factor, return_dict=False)[0]
-        #do_denormalize = [True] * image.shape[0]
-        #image = eval_pipe.image_processor.postprocess(image, output_type="pil", do_denormalize=do_denormalize)
-        return None, latents, prompt_embeds
+        if not with_refining:
+            image = eval_pipe.vae.decode(latents / eval_pipe.vae.config.scaling_factor, return_dict=False)[0]
+            do_denormalize = [True] * image.shape[0]
+            image = eval_pipe.image_processor.postprocess(image, output_type="pil", do_denormalize=do_denormalize)
+        else:
+            image = None
+        return image, latents, prompt_embeds
 
     @torch.no_grad()
     def refining(self,

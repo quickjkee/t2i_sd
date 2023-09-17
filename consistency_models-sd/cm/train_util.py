@@ -497,7 +497,8 @@ class CMTrainLoop(TrainLoop):
                         generator=generator,
                         timesteps=timesteps,
                         num_inference_steps=num_inference_steps, 
-                        guidance_scale=self.guidance_scale
+                        guidance_scale=self.guidance_scale,
+                        with_refining=True if num_refining_steps else False
                     )
 
                 if num_refining_steps:
