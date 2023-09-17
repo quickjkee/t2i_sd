@@ -469,7 +469,7 @@ class CMTrainLoop(TrainLoop):
                 refiner_pipe = copy.deepcopy(self.eval_pipe)
                 params = self.teacher_model_params
                 refiner_state_dict = self.mp_trainer.master_params_to_state_dict(params)
-                refiner_pipe.eval_pipe.unet.load_state_dict(refiner_state_dict)
+                refiner_pipe.unet.load_state_dict(refiner_state_dict)
 
             dist.barrier()
             
