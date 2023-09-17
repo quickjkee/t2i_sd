@@ -6,7 +6,6 @@ import io
 import os
 import socket
 
-import mpi4py
 import torch as th
 import torch.distributed as dist
 
