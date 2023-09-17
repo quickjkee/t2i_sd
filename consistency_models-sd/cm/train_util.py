@@ -503,9 +503,9 @@ class CMTrainLoop(TrainLoop):
                         prompt=text,
                         latents=x0_latents,
                         generator=generator_refining,
-                        num_inference_steps=5,
+                        num_inference_steps=num_refining_steps,
                         guidance_scale=self.guidance_scale,
-                        rollback_value=0.3,  # [0, 1]
+                        rollback_value=rollback_value,  # [0, 1]
                     )
 
                 for text_idx, global_idx in enumerate(rank_batches_index[cnt]):

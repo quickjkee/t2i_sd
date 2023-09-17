@@ -196,7 +196,9 @@ def main():
         coco_ref_stats_path=args.coco_ref_stats_path,
         inception_path=args.inception_path,
         coco_max_cnt=args.coco_max_cnt
-    ).generate_coco(args.steps)
+    ).generate_coco(args.steps,
+                    num_refining_steps=args.refining_steps,
+                    rollback_value=args.rollback_value)
 
 def create_argparser():
     defaults = dict(
@@ -222,6 +224,8 @@ def create_argparser():
         guidance_scale=8.0,
         coco_max_cnt=10000,
         steps=6,
+        refining_steps=5,
+        rollback_value=0.3,
         # Eval fid
         coco_ref_stats_path="evaluations/fid_stats_mscoco256_val.npz",
         inception_path="evaluations/pt_inception-2015-12-05-6726825d.pth"
