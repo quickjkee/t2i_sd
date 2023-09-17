@@ -456,7 +456,7 @@ class CMTrainLoop(TrainLoop):
         for ema_rate, params in zip(self.ema_rate, self.ema_params):
             # Setup seed equalt ot the world rank
             generator = th.Generator(device="cuda").manual_seed(dist.get_seed())
-            generator_refining = th.Generator(device="cuda").manual_seed(dist.get_seed()) if num_refining_steps else None
+            generator_refining = th.Generator(device="cuda").manual_seed(dist.get_seed() + 1) if num_refining_steps else None
 
             th.manual_seed(dist.get_seed())
 
