@@ -504,6 +504,7 @@ class DenoiserSD:
                  generator=None,
                  num_inference_steps=50,
                  guidance_scale=8.0,
+                 refining_scheduler='DPM',
                  ):
         device = eval_pipe._execution_device
 
@@ -550,7 +551,13 @@ class DenoiserSD:
                     t2 = torch.zeros_like(timesteps[i])
                 else:
                     t2 = timesteps[i + 1]
-                latents = self.scheduler_step(noise_pred, t, t2, latents)
+
+                if refining_scheduler == 'DDIM':
+                    latents = self.scheduler_step(noise_pred, t, t2, latents)
+                elif refining_scheduler == 'DPM':
+                    eval_pipe.scheduler.timesteps = timesteps
+                    latents = eval_pipe.scheduler.step(noise_pred, t[0].item(), latents, generator, False)[0]
+
                 # call the callback, if provided
                 progress_bar.update()
 

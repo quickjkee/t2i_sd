@@ -22,7 +22,7 @@ import os
 from omegaconf import OmegaConf
 from cm.yt.utils import instantiate_from_config
 
-from diffusers import StableDiffusionImg2ImgPipeline, StableDiffusionPipeline, DDIMScheduler
+from diffusers import StableDiffusionImg2ImgPipeline, StableDiffusionPipeline, DDIMScheduler, DPMSolverMultistepScheduler
 from cm import logger
 from cm.script_util import (
     set_dropout_rate,
@@ -81,7 +81,11 @@ def main():
         torch_dtype=th.float16 if args.use_fp16 else th.float32, 
         variant="fp16" if args.use_fp16 else "fp32", 
     )
-    pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+    if args.scheduler_type == 'DDIM':
+        pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+    elif args.scheduler_type == 'DPM':
+        pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+
     pipe.scheduler.final_alpha_cumprod = th.tensor(1.0) # set boundary condition
     # ^-- Keep this in mind, may be important
     pipe.to(dist.dev())
@@ -226,6 +230,7 @@ def create_argparser():
         steps=6,
         refining_steps=5,
         rollback_value=0.3,
+        scheduler_type='DDIM',
         # Eval fid
         coco_ref_stats_path="evaluations/fid_stats_mscoco256_val.npz",
         inception_path="evaluations/pt_inception-2015-12-05-6726825d.pth"

@@ -444,7 +444,8 @@ class CMTrainLoop(TrainLoop):
     @th.no_grad()
     def generate_coco(self, num_inference_steps=3,
                             num_refining_steps=0,
-                            rollback_value=0.3):
+                            rollback_value=0.3,
+                            scheduler='DDIM'):
 
         prev_state_dict = self.model.state_dict()
         self.model.eval()
@@ -512,6 +513,7 @@ class CMTrainLoop(TrainLoop):
                         num_inference_steps=num_refining_steps,
                         guidance_scale=self.guidance_scale,
                         rollback_value=rollback_value,  # [0, 1]
+                        refining_scheduler=scheduler
                     )
 
                 for text_idx, global_idx in enumerate(rank_batches_index[cnt]):
