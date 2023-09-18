@@ -527,6 +527,9 @@ class DenoiserSD:
         noise = torch.randn(x0_latents.size(), generator=generator, device=device)
         latents = sqrt_alpha_prod * x0_latents + sqrt_one_minus_alpha_prod * noise
 
+        # update scheduler params
+        eval_pipe.scheduler.model_outputs = [None] * 2 # 2 - solver order
+
         with eval_pipe.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
                 # expand the latents if we are doing classifier free guidance
