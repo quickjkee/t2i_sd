@@ -529,6 +529,8 @@ class DenoiserSD:
 
         # update scheduler params
         eval_pipe.scheduler.model_outputs = [None] * 2  # 2 - solver order
+        eval_pipe.scheduler.timesteps = timesteps
+        eval_pipe.scheduler.num_inference_steps = len(timesteps)
 
         with eval_pipe.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
@@ -559,8 +561,6 @@ class DenoiserSD:
                 if scheduler_type == 'DDIM':
                     latents = self.scheduler_step(noise_pred, t, t2, latents)
                 elif scheduler_type == 'DPM':
-                    eval_pipe.scheduler.timesteps = timesteps
-                    eval_pipe.scheduler.num_inference_steps = len(timesteps)
                     latents = eval_pipe.scheduler.step(noise_pred, t.item(), latents, generator, False)[0]
 
                 # call the callback, if provided
