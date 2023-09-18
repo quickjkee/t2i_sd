@@ -50,7 +50,7 @@ for step in [6]:
                              --steps {step} \
                              --refining_steps {ref_step} \
                              --rollback_value {rollback_v} \
-                             --scheduler_type DDIM',
+                             --scheduler_type DPM',
                             shell=True)
 
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
