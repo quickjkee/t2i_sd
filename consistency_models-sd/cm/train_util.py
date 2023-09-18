@@ -442,10 +442,11 @@ class CMTrainLoop(TrainLoop):
         self.timer = time.time()
 
     @th.no_grad()
-    def generate_coco(self, num_inference_steps=3,
+    def generate_coco(self, scheduler_refining,
+                            num_inference_steps=3,
                             num_refining_steps=0,
                             rollback_value=0.3,
-                            scheduler='DDIM'):
+                            scheduler_type='DDIM'):
 
         prev_state_dict = self.model.state_dict()
         self.model.eval()
@@ -476,6 +477,7 @@ class CMTrainLoop(TrainLoop):
                 params = self.teacher_model_params
                 refiner_state_dict = self.mp_trainer.master_params_to_state_dict(params)
                 refiner_pipe.unet.load_state_dict(refiner_state_dict)
+                refiner_pipe.scheduler = scheduler_refining
 
             dist.barrier()
             
@@ -513,7 +515,7 @@ class CMTrainLoop(TrainLoop):
                         num_inference_steps=num_refining_steps,
                         guidance_scale=self.guidance_scale,
                         rollback_value=rollback_value,  # [0, 1]
-                        refining_scheduler=scheduler
+                        scheduler_type=scheduler_type,
                     )
 
                 for text_idx, global_idx in enumerate(rank_batches_index[cnt]):

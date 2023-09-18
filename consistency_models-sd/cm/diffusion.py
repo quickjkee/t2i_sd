@@ -425,7 +425,9 @@ class DenoiserSD:
         )
 
         # 4. Sample timesteps uniformly (first step is 981)
-        self.scheduler.set_timesteps(num_scales, device=device)
+        if self.scheduler.num_inference_steps is None:
+            self.scheduler.set_timesteps(num_scales, device=device)
+        print(self.scheduler.timesteps)
         self.scheduler.alphas_cumprod = self.scheduler.alphas_cumprod.to(device)
 
         if timesteps is None:
@@ -556,7 +558,7 @@ class DenoiserSD:
                     latents = self.scheduler_step(noise_pred, t, t2, latents)
                 elif refining_scheduler == 'DPM':
                     eval_pipe.scheduler.timesteps = timesteps
-                    latents = eval_pipe.scheduler.step(noise_pred, t[0].item(), latents, generator, False)[0]
+                    latents = eval_pipe.scheduler.step(noise_pred, t.item(), latents, generator, False)[0]
 
                 # call the callback, if provided
                 progress_bar.update()

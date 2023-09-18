@@ -81,10 +81,11 @@ def main():
         torch_dtype=th.float16 if args.use_fp16 else th.float32, 
         variant="fp16" if args.use_fp16 else "fp32", 
     )
+    pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
     if args.scheduler_type == 'DDIM':
-        pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+        scheduler_refining = DDIMScheduler.from_config(pipe.scheduler.config)
     elif args.scheduler_type == 'DPM':
-        pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+        scheduler_refining = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
 
     pipe.scheduler.final_alpha_cumprod = th.tensor(1.0) # set boundary condition
     # ^-- Keep this in mind, may be important
@@ -200,7 +201,8 @@ def main():
         coco_ref_stats_path=args.coco_ref_stats_path,
         inception_path=args.inception_path,
         coco_max_cnt=args.coco_max_cnt
-    ).generate_coco(args.steps,
+    ).generate_coco(scheduler_refining=scheduler_refining,
+                    num_inference_steps=args.steps,
                     num_refining_steps=args.refining_steps,
                     rollback_value=args.rollback_value,
                     scheduler=args.scheduler_type)
