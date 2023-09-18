@@ -38,7 +38,7 @@ from copy import deepcopy
 from coco_dataset import COCODataset, InfiniteSampler
 
 
-def prepare_coco_prompts(path, bs=5, max_cnt=10000):
+def prepare_coco_prompts(path, bs=25, max_cnt=10000):
     import pandas as pd
     import numpy as np
 
