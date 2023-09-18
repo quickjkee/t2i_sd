@@ -205,7 +205,7 @@ def main():
                     num_inference_steps=args.steps,
                     num_refining_steps=args.refining_steps,
                     rollback_value=args.rollback_value,
-                    scheduler=args.scheduler_type)
+                    scheduler_type=args.scheduler_type)
 
 def create_argparser():
     defaults = dict(
