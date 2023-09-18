@@ -557,6 +557,7 @@ class DenoiserSD:
                     latents = self.scheduler_step(noise_pred, t, t2, latents)
                 elif scheduler_type == 'DPM':
                     eval_pipe.scheduler.timesteps = timesteps
+                    eval_pipe.scheduler.num_inference_steps = len(timesteps)
                     latents = eval_pipe.scheduler.step(noise_pred, t.item(), latents, generator, False)[0]
 
                 # call the callback, if provided
