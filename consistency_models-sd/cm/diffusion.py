@@ -528,7 +528,7 @@ class DenoiserSD:
         latents = sqrt_alpha_prod * x0_latents + sqrt_one_minus_alpha_prod * noise
 
         # update scheduler params
-        eval_pipe.scheduler.model_outputs = [None] * 2  # 2 - solver order
+        #eval_pipe.scheduler.model_outputs = [None] * 2  # 2 - solver order
         eval_pipe.scheduler.timesteps = timesteps
         eval_pipe.scheduler.num_inference_steps = len(timesteps)
 
