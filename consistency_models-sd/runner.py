@@ -50,7 +50,8 @@ for step in [6]:
                              --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
                              --steps {step} \
                              --refining_steps {ref_step} \
-                             --rollback_value {rollback_v}',
+                             --rollback_value {rollback_v} \
+                             --scheduler_type DPM',
                             shell=True)
 
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \

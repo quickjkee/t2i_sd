@@ -202,7 +202,8 @@ def main():
         coco_max_cnt=args.coco_max_cnt
     ).generate_coco(args.steps,
                     num_refining_steps=args.refining_steps,
-                    rollback_value=args.rollback_value)
+                    rollback_value=args.rollback_value,
+                    scheduler=args.scheduler_type)
 
 def create_argparser():
     defaults = dict(
