@@ -22,7 +22,7 @@ OUTPUT_PATH = get_blob_logdir()
 #torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 
 for step in [50]:
-    for ref_step in [45]: #5, 10, 15, 25, 35, 45
+    for ref_step in [0]: #5, 10, 15, 25, 35, 45
         for rollback_v in [0]:
             print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
