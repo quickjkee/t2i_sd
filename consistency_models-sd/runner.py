@@ -47,7 +47,7 @@ for step in [50]:
                              --weight_schedule uniform \
                              --coco_train_path coco/coco \
                              --coco_max_cnt 5000 \
-                             #--resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
+                             --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
                              --steps {step} \
                              --refining_steps {ref_step} \
                              --rollback_value {rollback_v} \
