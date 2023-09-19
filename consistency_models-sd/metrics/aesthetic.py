@@ -113,15 +113,21 @@ def calculate_reward_given_paths(path_images, path_prompts):
     all_text = list(df['caption'])
     file_names = os.listdir(path_images)
 
+    named_rewards = {}
     rewards = []
     for file in file_names:
         idx_text = int(file.split('.')[0])
         prompt = all_text[idx_text]
 
-        reward = model.score(prompt, [f"{path_images}/{file}"])
+        file_path = f"{path_images}/{file}"
+        reward = model.score(prompt, [file_path])
+
         rewards.append(reward)
+        named_rewards[file_path] = reward
 
     print(f'Mean reward {np.mean(rewards)}')
+
+    return named_rewards
 
 
 
