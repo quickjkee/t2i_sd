@@ -22,9 +22,8 @@ OUTPUT_PATH = get_blob_logdir()
 torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 
 for step in [6]:
-    for ref_step in [45]: #5, 10, 15, 25, 35, 45
-        for rollback_v in [0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6,
-                           0.65, 0.7, 0.75, 0.8, 0.85, 0.9]:
+    for ref_step in [5]: #5, 10, 15, 25, 35, 45
+        for rollback_v in [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]:
             print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
                              --nproc_per_node=8 --master-addr=0.0.0.0:1207 scripts/cm_train.py \
@@ -52,20 +51,21 @@ for step in [6]:
                              --steps {step} \
                              --refining_steps {ref_step} \
                              --rollback_value {rollback_v} \
-                             --scheduler_type DPM',
+                             --scheduler_type DDIM',
                             shell=True)
 
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
-                            --folder tmp/samples_75000_steps_{step}_ema_0.9999/',
+                            --folder tmp/samples_75000_steps_{step}_ema_0.9999/ \
+                            --folder_csv subset_30k.csv',
                             shell=True)
 
-            subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
-                            --nproc_per_node=8 metrics/main_no_faiss.py \
-                            --sample_path tmp/samples_75000_steps_{step}_ema_0.9999/ \
-                            --real_feature_path {INPUT_PATH}/dinov2_vitl14_laion_1100K_features.pt \
-                            --bs 256 \
-                            --save_path hz \
-                            ', shell=True)
+            #subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
+            #                --nproc_per_node=8 metrics/main_no_faiss.py \
+            #                --sample_path tmp/samples_75000_steps_{step}_ema_0.9999/ \
+            #                --real_feature_path {INPUT_PATH}/dinov2_vitl14_laion_1100K_features.pt \
+            #                --bs 256 \
+            #                --save_path hz \
+            #                ', shell=True)
 
             print('============================================================================================')
             print('============================================================================================')

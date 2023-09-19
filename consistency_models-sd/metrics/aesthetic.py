@@ -1,10 +1,14 @@
 import argparse
+import os
+
 import torch
 import pytorch_lightning as pl
 import torch.nn as nn
 import clip
 import pathlib
 import numpy as np
+import ImageReward as RM
+import pandas as pd
 
 from PIL import Image, ImageFile
 from tqdm import tqdm
@@ -100,6 +104,24 @@ def calculate_aesthetic_given_paths(paths, max_size):
 
     mean_pred = np.mean(preds)
     return mean_pred
+
+
+@torch.no_grad()
+def calculate_reward_given_paths(path_images, path_prompts):
+    model = RM.load("ImageReward-v1.0")
+    df = pd.read_csv(path_prompts)
+    all_text = list(df['caption'])
+    file_names = os.listdir(path_images)
+
+    rewards = []
+    for file in file_names:
+        idx_text = int(file.split('.')[0])
+        prompt = all_text[idx_text]
+
+        reward = model.score(prompt, [f"{path_images}/{file}"])
+        rewards.append(reward)
+
+    print(f'Mean reward {np.mean(rewards)}')
 
 
 
