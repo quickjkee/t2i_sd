@@ -2,6 +2,7 @@ import subprocess
 import os
 import nirvana_dl
 import torch
+import ImageReward as RM
 
 # Utils
 # ----------------------------------------------------------
