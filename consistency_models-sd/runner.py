@@ -54,7 +54,7 @@ for step in [50]:
                             shell=True)
 
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
-                            --folder tmp/samples_75000_steps_{step}_ema_0.9999/ \
+                            --folder tmp/samples_0_steps_{step}_ema_0.9999/ \
                             --folder_csv subset_30k.csv',
                             shell=True)
 
