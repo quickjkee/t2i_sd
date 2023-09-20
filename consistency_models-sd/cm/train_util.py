@@ -501,7 +501,7 @@ class CMTrainLoop(TrainLoop):
                         )
                     elif scheduler_type == 'DPM':
                         image = self.diffusion.sample_with_my_step_dpm(
-                            self.eval_pipe,
+                            refiner_pipe,
                             text,
                             generator=generator,
                             num_inference_steps=num_inference_steps,

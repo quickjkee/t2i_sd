@@ -19,7 +19,7 @@ INPUT_PATH = os.environ['INPUT_PATH']
 OUTPUT_PATH = get_blob_logdir()
 
 # Try load first
-#torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
+torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 
 for step in [5, 10, 15, 20, 30, 40, 50]:
     for ref_step in [0]: #5, 10, 15, 25, 35, 45
