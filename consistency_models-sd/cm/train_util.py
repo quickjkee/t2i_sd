@@ -491,13 +491,22 @@ class CMTrainLoop(TrainLoop):
             for cnt, mini_batch in enumerate(tqdm(rank_batches, unit='batch', disable=(dist.get_rank() != 0))):
                 text = list(mini_batch)
                 if num_inference_steps:
-                    image = self.diffusion.sample_with_my_step(
-                        self.eval_pipe,
-                        text, 
-                        generator=generator, 
-                        num_inference_steps=num_inference_steps, 
-                        guidance_scale=self.guidance_scale
-                    )
+                    if scheduler_type == 'DDIM':
+                        image = self.diffusion.sample_with_my_step(
+                            self.eval_pipe,
+                            text,
+                            generator=generator,
+                            num_inference_steps=num_inference_steps,
+                            guidance_scale=self.guidance_scale
+                        )
+                    elif scheduler_type == 'DPM':
+                        image = self.diffusion.sample_with_my_step_dpm(
+                            self.eval_pipe,
+                            text,
+                            generator=generator,
+                            num_inference_steps=num_inference_steps,
+                            guidance_scale=self.guidance_scale
+                        )
                 else:
                     image, x0_latents, prompt_embeds = self.diffusion.stochastic_iterative_sampler(
                         self.eval_pipe,

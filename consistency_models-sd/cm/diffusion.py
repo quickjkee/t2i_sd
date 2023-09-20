@@ -289,6 +289,105 @@ class DenoiserSD:
         return prev_sample
 
     @torch.no_grad()
+    def sample_with_my_step_dpm(self,
+                            eval_pipe,
+                            prompt,
+                            generator=None,
+                            num_inference_steps=50,
+                            guidance_scale=8.0,
+                            num_scales=50,
+                            ):
+        height = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
+        width = eval_pipe.unet.config.sample_size * eval_pipe.vae_scale_factor
+
+        # 1. Check inputs. Raise error if not correct
+        eval_pipe.check_inputs(
+            prompt, height, width, 1, None, None, None
+        )
+
+        # 2. Define call parameters
+        if prompt is not None and isinstance(prompt, str):
+            batch_size = 1
+        elif prompt is not None and isinstance(prompt, list):
+            batch_size = len(prompt)
+
+        device = eval_pipe._execution_device
+
+        # here `guidance_scale` is defined analog to the guidance weight `w` of equation (2)
+        # of the Imagen paper: https://arxiv.org/pdf/2205.11487.pdf . `guidance_scale = 1`
+        # corresponds to doing no classifier free guidance.
+        do_classifier_free_guidance = guidance_scale > 1.0
+
+        prompt_embeds = eval_pipe._encode_prompt(
+            prompt,
+            device,
+            1,
+            do_classifier_free_guidance
+        )
+
+        # 4. Sample timesteps uniformly (first step is 981)
+        self.scheduler.set_timesteps(num_scales, device=device)
+        self.scheduler.alphas_cumprod = self.scheduler.alphas_cumprod.to(device)
+        if num_inference_steps == num_scales:
+            timesteps = self.scheduler.timesteps
+        else:
+            step = num_scales / num_inference_steps
+            step_ids = torch.arange(0, num_scales, step).to(int)
+            timesteps = self.scheduler.timesteps[step_ids]
+        assert len(timesteps) == num_inference_steps
+
+        eval_pipe.scheduler.timesteps = timesteps
+        eval_pipe.scheduler.num_inference_steps = len(timesteps)
+
+        # 5. Prepare latent variables
+        num_channels_latents = eval_pipe.unet.config.in_channels
+        latents = eval_pipe.prepare_latents(
+            batch_size,
+            num_channels_latents,
+            height,
+            width,
+            prompt_embeds.dtype,
+            device,
+            generator,
+            None,
+        )
+        with eval_pipe.progress_bar(total=num_inference_steps) as progress_bar:
+            for i, t in enumerate(timesteps):
+                # expand the latents if we are doing classifier free guidance
+                latent_model_input = torch.cat([latents] * 2) if do_classifier_free_guidance else latents
+                latent_model_input = eval_pipe.scheduler.scale_model_input(latent_model_input, t)
+
+                # predict the noise residual
+                noise_pred = eval_pipe.unet(
+                    latent_model_input,
+                    t,
+                    encoder_hidden_states=prompt_embeds,
+                    cross_attention_kwargs=None,
+                    return_dict=False,
+                )[0]
+
+                # perform guidance
+                if do_classifier_free_guidance:
+                    noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
+                    noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
+
+                # compute the previous noisy sample x_t -> x_t-1
+                if i == len(timesteps) - 1:
+                    t2 = torch.zeros_like(timesteps[i])
+                else:
+                    t2 = timesteps[i + 1]
+
+                latents = eval_pipe.scheduler.step(noise_pred, t.item(), latents, generator, False)[0]
+
+                # call the callback, if provided
+                progress_bar.update()
+
+        image = eval_pipe.vae.decode(latents / eval_pipe.vae.config.scaling_factor, return_dict=False)[0]
+        do_denormalize = [True] * image.shape[0]
+        image = eval_pipe.image_processor.postprocess(image, output_type="pil", do_denormalize=do_denormalize)
+        return image
+
+    @torch.no_grad()
     def sample_with_my_step(self, 
         eval_pipe,
         prompt, 
