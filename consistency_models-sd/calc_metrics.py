@@ -22,8 +22,8 @@ folder_csv = conf.folder_csv
 #aesth = calculate_aesthetic_given_paths((0, folder), 50000)
 #print(f'Aesthetic {aesth}')
 
-#fid = calculate_fid_given_paths((folder, 'evaluations/fid_stats_mscoco512_val.npz'), 'cuda')
-#print(f'Fid {fid}')
+fid = calculate_fid_given_paths((folder, 'evaluations/fid_stats_mscoco512_val.npz'), 'cuda')
+print(f'Fid {fid}')
 
 reward = calculate_reward_given_paths(folder, folder_csv)
 print(f'Reward {reward}')

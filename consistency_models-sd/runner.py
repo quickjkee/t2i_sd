@@ -21,7 +21,7 @@ OUTPUT_PATH = get_blob_logdir()
 # Try load first
 #torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 
-for step in [50]:
+for step in [5, 10, 15, 20, 30, 40, 50]:
     for ref_step in [0]: #5, 10, 15, 25, 35, 45
         for rollback_v in [0]:
             print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
@@ -52,6 +52,8 @@ for step in [50]:
                              --rollback_value {rollback_v} \
                              --scheduler_type DDIM',
                             shell=True)
+
+#  --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
 
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
                             --folder tmp/samples_0_steps_{step}_ema_0.9999/ \
