@@ -475,7 +475,7 @@ class CMTrainLoop(TrainLoop):
             self.eval_pipe.unet.load_state_dict(ema_state_dict)
             assert not self.eval_pipe.unet.training
 
-            if num_refining_steps:
+            if num_refining_steps or scheduler_type == 'DPM':
                 refiner_pipe = copy.deepcopy(self.eval_pipe)
                 params = self.teacher_model_params
                 refiner_state_dict = self.mp_trainer.master_params_to_state_dict(params)
