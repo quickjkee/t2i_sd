@@ -49,6 +49,7 @@ for step in [6]:
                              --coco_max_cnt 5000 \
                              --steps {step} \
                              --refining_steps {ref_step} \
+                             --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
                              --rollback_value {rollback_v} \
                              --scheduler_type DDIM',
                             shell=True)
