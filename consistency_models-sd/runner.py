@@ -51,7 +51,7 @@ for step in [6]:
                              --refining_steps {ref_step} \
                              --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
                              --rollback_value {rollback_v} \
-                             --scheduler_type DDIM',
+                             --scheduler_type DPM',
                             shell=True)
 
 #  --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
