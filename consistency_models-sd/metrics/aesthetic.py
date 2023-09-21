@@ -119,13 +119,13 @@ def calculate_reward_given_paths(path_images, path_prompts):
         idx_text = int(file.split('.')[0])
         prompt = all_text[idx_text]
 
-        file_path = f"{path_images}/{file}"
+        file_path = f"{path_images}{file}"
         reward = model.score(prompt, [file_path])
 
         rewards.append(reward)
         named_rewards[file_path] = reward
 
-    print(f'Mean reward {np.mean(rewards)}')
+    print(f'Mean reward {np.mean(rewards)} for {path_images}')
 
     return named_rewards
 

@@ -551,7 +551,7 @@ class CMTrainLoop(TrainLoop):
                 gathered_text_idxs =  np.concatenate(
                     [text_idxs.cpu().numpy() for text_idxs in gathered_text_idxs], axis=0
                 )
-                save_dir = os.path.join(logger.get_dir(), f"samples_{self.global_step}_steps_{num_inference_steps}_ema_{ema_rate}")
+                save_dir = os.path.join(logger.get_dir(), f"samples_{self.global_step}_steps_{num_inference_steps}_ema_{ema_rate}_ref_{num_refining_steps}")
                 os.makedirs(save_dir, exist_ok=True)
                 for image, global_idx in zip(gathered_images, gathered_text_idxs):
                     ToPILImage()(image).save(os.path.join(save_dir, f"{global_idx}.jpg"))
