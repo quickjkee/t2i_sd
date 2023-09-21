@@ -22,8 +22,9 @@ OUTPUT_PATH = get_blob_logdir()
 torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 
 for step in [6]:
-    for ref_step in [0]: #5, 10, 15, 25, 35, 45
-        for rollback_v in [0.1]:
+    for ref_step in [5]: #5, 10, 15, 25, 35, 45
+        for rollback_v in [0.1, 0.12, 0.14, 0.16, 0.18, 0.2, 0.22, 0.25, 0.3, 0.33, 0.35,
+                           0.38, 0.4, 0.42, 0.44, 0.5]:
             print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
             subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
                              --nproc_per_node=8 --master-addr=0.0.0.0:1207 scripts/cm_train.py \
@@ -51,7 +52,7 @@ for step in [6]:
                              --refining_steps {ref_step} \
                              --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
                              --rollback_value {rollback_v} \
-                             --scheduler_type DDIM',
+                             --scheduler_type DPM',
                             shell=True)
 
 #  --resume_checkpoint {INPUT_PATH}/needed/model75000.pt \
