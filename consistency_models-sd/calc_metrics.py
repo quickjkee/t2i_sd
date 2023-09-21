@@ -32,7 +32,6 @@ def mover(folder_proxy, reward_proxy, folder, percentile):
 
     metric_dict = reward_proxy
     sorted_metric_dict = dict(sorted(metric_dict.items(), key=lambda item: item[1], reverse=False))
-    print(sorted_metric_dict)
 
     names = list(sorted_metric_dict.keys())
     ref_names = names[:int(total_size * percentile)]
@@ -47,7 +46,7 @@ def mover(folder_proxy, reward_proxy, folder, percentile):
         name_splitted = file.split('/')[-1]
         shutil.copy(f'{file}', f'{outdir}/{name_splitted}')
 
-    print(f'Size of adaptive folder {len(os.listdir())}')
+    print(f'Size of adaptive folder {len(os.listdir(outdir))}')
     return outdir
 # --------------------------------------
 
@@ -76,4 +75,4 @@ else:
         folder_adaptive = mover(folder_proxy, reward_proxy, folder, percentile=perc)
         fid = calculate_fid_given_paths((folder_adaptive, 'evaluations/fid_stats_mscoco512_val.npz'), 'cuda')
         print(f'Fid {fid} for {folder_adaptive}')
-        reward = calculate_reward_given_paths(folder_adaptive, folder_csv)
+        reward = calculate_reward_given_paths(f'{folder_adaptive}/', folder_csv)
