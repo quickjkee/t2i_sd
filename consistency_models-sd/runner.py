@@ -46,7 +46,6 @@ for _ in [6]:
                                  --save_interval 10 \
                                  --laion_config configs/laion.yaml \
                                  --weight_schedule uniform \
-                                 --coco_train_path coco/coco \
                                  --coco_max_cnt 5000 \
                                  --steps {step} \
                                  --refining_steps {ref_step} \
