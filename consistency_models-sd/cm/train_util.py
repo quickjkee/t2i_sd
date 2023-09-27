@@ -9,6 +9,7 @@ import torch as th
 from torch.nn.parallel.distributed import DistributedDataParallel as DDP
 from torch.optim import RAdam
 
+import subprocess
 import numpy as np
 import copy
 import random
@@ -555,6 +556,14 @@ class CMTrainLoop(TrainLoop):
                 for image, global_idx in zip(gathered_images, gathered_text_idxs):
                     ToPILImage()(image).save(os.path.join(save_dir, f"{global_idx}.jpg"))
             # Done.
+            dist.barrier()
+
+            subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
+                            --folder {save_dir} \
+                            --folder_proxy {save_dir} \
+                            --folder_csv subset_30k.csv',
+                            shell=True)
+
             dist.barrier()
 
         self.model.load_state_dict(prev_state_dict)
