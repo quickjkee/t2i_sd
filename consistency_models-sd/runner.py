@@ -2,6 +2,7 @@ import subprocess
 import os
 import nirvana_dl
 import torch
+import sys
 import ImageReward as RM
 
 # Utils
@@ -17,6 +18,9 @@ def get_blob_logdir():
 SOURCE_CODE_PATH = os.environ['SOURCE_CODE_PATH']
 INPUT_PATH = os.environ['INPUT_PATH']
 OUTPUT_PATH = get_blob_logdir()
+
+sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd')
+sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/cm')
 
 # Try load first
 torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
