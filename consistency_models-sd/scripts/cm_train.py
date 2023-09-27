@@ -13,6 +13,7 @@ sys.path.append(f'{SOURCE_CODE_PATH}/code')
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd')
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/cm')
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/scripts')
+sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 ######################################################
 
 import argparse
