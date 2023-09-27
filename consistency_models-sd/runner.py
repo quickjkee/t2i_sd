@@ -44,7 +44,7 @@ for _ in [6]:
                                  --loss_norm l2 \
                                  --lr_anneal_steps 0 \
                                  --teacher_model_path sd-v1-5 \
-                                 --ema_rate 0.9999 \
+                                 --ema_rate 0.999,0.9999,0.9999432189950708 \
                                  --global_batch_size 240 \
                                  --lr 0.0008 \
                                  --use_fp16 False \
@@ -63,7 +63,9 @@ for _ in [6]:
                                  --rollback_value {rollback_v} \
                                  --scheduler_type DPM',
                                 shell=True)
+
                 print(os.listdir(LOG_PATH))
+
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
                                 --folder {LOG_PATH}/samples_0_steps_{step}_ema_0.9999_ref_{ref_step}/ \
                                 --folder_proxy {LOG_PATH}/samples_0_steps_{step}_ema_0.9999_ref_0/ \
