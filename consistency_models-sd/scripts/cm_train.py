@@ -9,10 +9,10 @@ import os
 SOURCE_CODE_PATH = os.environ['SOURCE_CODE_PATH']
 INPUT_PATH = os.environ['INPUT_PATH']
 
-sys.path.append(f'{SOURCE_CODE_PATH}/t2i_sd')
-sys.path.append(f'{SOURCE_CODE_PATH}/t2i_sd/consistency_models-sd')
-sys.path.append(f'{SOURCE_CODE_PATH}/t2i_sd/consistency_models-sd/cm')
-sys.path.append(f'{SOURCE_CODE_PATH}/t2i_sd/consistency_models-sd/scripts')
+sys.path.append(f'{SOURCE_CODE_PATH}/code')
+sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd')
+sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/cm')
+sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/scripts')
 ######################################################
 
 import argparse
