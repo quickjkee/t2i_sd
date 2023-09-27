@@ -17,6 +17,7 @@ def get_blob_logdir():
 
 SOURCE_CODE_PATH = os.environ['SOURCE_CODE_PATH']
 INPUT_PATH = os.environ['INPUT_PATH']
+LOG_PATH = os.environ['OPENAI_LOGDIR']
 OUTPUT_PATH = get_blob_logdir()
 
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd')
@@ -61,10 +62,10 @@ for _ in [6]:
                                  --rollback_value {rollback_v} \
                                  --scheduler_type DPM',
                                 shell=True)
-
+                print(os.listdir(LOG_PATH))
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
-                                --folder tmp/samples_75000_steps_{step}_ema_0.9999_ref_{ref_step}/ \
-                                --folder_proxy tmp/samples_75000_steps_{step}_ema_0.9999_ref_0/ \
+                                --folder {LOG_PATH}/samples_0_steps_{step}_ema_0.9999_ref_{ref_step}/ \
+                                --folder_proxy {LOG_PATH}/samples_0_steps_{step}_ema_0.9999_ref_0/ \
                                 --folder_csv subset_30k.csv',
                                 shell=True)
 
