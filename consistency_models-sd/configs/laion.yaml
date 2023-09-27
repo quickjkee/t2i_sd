@@ -6,7 +6,7 @@ train_dataloader:
       dataset:
         target: cm.yt.yt_iterable_dataset.IterableYTDataset
         params:
-          table: //home/cvtest/mathemage/laion_512
+          table: //home/yr/datasets/laion_512_filtered
       preprocess:
         - in_map:
             image_bytes: image_512
