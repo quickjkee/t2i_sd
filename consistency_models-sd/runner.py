@@ -22,6 +22,7 @@ OUTPUT_PATH = get_blob_logdir()
 
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd')
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/cm')
+sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 
 # Try load first
 torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
