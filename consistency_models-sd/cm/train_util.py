@@ -572,12 +572,12 @@ def parse_resume_step_from_filename(filename):
     """
     split = filename.split("model")
     if len(split) < 2:
-        return 0
+        return 1  # WAS 0
     split1 = split[-1].split(".")[0]
     try:
         return int(split1)
     except ValueError:
-        return 0
+        return 1  # WAS 0
 
 def recover_resume_step():
     sample_dirs = [name for name in os.listdir(get_blob_logdir()) if "sample" in name]
