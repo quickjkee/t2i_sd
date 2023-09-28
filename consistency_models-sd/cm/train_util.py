@@ -607,15 +607,15 @@ def find_resume_checkpoint():
     return None
 
 
-def find_ema_checkpoint(main_checkpoint, step, rate):
+def find_ema_checkpoint(main_checkpoint, rate):
     if main_checkpoint is None:
         return None
-    filename = f"ema_{rate}_{step}.pt"
-    path = bf.join(bf.dirname(main_checkpoint), filename)
-    print(path)
-    if bf.exists(path):
+    filename = f"ema_{rate}.pt"
+    path = os.path.join(os.path.dirname(main_checkpoint), filename)
+    if os.path.exists(path):
         return path
     return None
+
 
 
 def log_loss_dict(diffusion, ts, losses):
