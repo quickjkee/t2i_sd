@@ -61,15 +61,7 @@ for _ in [6]:
                                  --inception_path evaluations/pt_inception-2015-12-05-6726825d.pth \
                                  --guidance_scale 8.0 \
                                  --rollback_value {rollback_v} \
-                                 --scheduler_type DPM',
-                                shell=True)
-
-                print(os.listdir(LOG_PATH))
-
-                subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
-                                --folder {LOG_PATH}/samples_0_steps_{step}_ema_0.9999_ref_{ref_step}/ \
-                                --folder_proxy {LOG_PATH}/samples_0_steps_{step}_ema_0.9999_ref_0/ \
-                                --folder_csv subset_30k.csv',
+                                 --scheduler_type DDIM',
                                 shell=True)
 
                 print('============================================================================================')
