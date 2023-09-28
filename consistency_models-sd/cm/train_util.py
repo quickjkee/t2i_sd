@@ -160,7 +160,7 @@ class TrainLoop:
         ema_params = copy.deepcopy(self.mp_trainer.master_params)
 
         main_checkpoint = find_resume_checkpoint() or self.resume_checkpoint
-        ema_checkpoint = find_ema_checkpoint(main_checkpoint, self.resume_step, rate)
+        ema_checkpoint = find_ema_checkpoint(main_checkpoint, self.resume_step)
         print(ema_checkpoint)
         if ema_checkpoint:
             if dist.get_rank() == 0:
