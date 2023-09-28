@@ -16,7 +16,7 @@ def copy_snapshot_to_out(out):
         snapshot_path = nirvana_dl.snapshot.get_snapshot_path()
         print(f"Copy the previous state from {snapshot_path} to {out}")
         copy_tree(snapshot_path, out)
-        os.system(f"tar -xf {out} -C {out}/")
+        os.system(f"tar -xf {out}/state -C {out}/")
     
 
 def copy_out_to_snapshot(out, dump=True):
@@ -29,7 +29,7 @@ def copy_out_to_snapshot(out, dump=True):
         print(f"Copy {out} to the snapshot path: {snapshot_path}")
 
         # Delete previous state to avoid memory explosion
-        os.system(f"rm {snapshot_path}")
+        os.system(f"rm {snapshot_path}/state")
         copy_tree(out, snapshot_path)
 
         if dump:
