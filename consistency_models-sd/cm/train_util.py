@@ -551,14 +551,12 @@ class CMTrainLoop(TrainLoop):
                 os.makedirs(save_dir, exist_ok=True)
                 for image, global_idx in zip(gathered_images, gathered_text_idxs):
                     ToPILImage()(image).save(os.path.join(save_dir, f"{global_idx}.jpg"))
-            # Done.
-            dist.barrier()
 
-            subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
-                            --folder {save_dir} \
-                            --folder_proxy {save_dir} \
-                            --folder_csv subset_30k.csv',
-                            shell=True)
+                subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
+                                --folder {save_dir} \
+                                --folder_proxy {save_dir} \
+                                --folder_csv subset_30k.csv',
+                                shell=True)
 
             dist.barrier()
 
