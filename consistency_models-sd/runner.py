@@ -30,7 +30,7 @@ torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 for _ in [6]:
     for _ in [0]:
         for _ in [0.5]:
-            for (step, ref_step, rollback_v) in [(50, 0, 0.0), (6, 0, 0.0)]:
+            for (step, ref_step, rollback_v) in [(6, 0, 0.0)]:
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
                                  --nproc_per_node=8 --master-addr=0.0.0.0:1207 scripts/cm_train.py \
