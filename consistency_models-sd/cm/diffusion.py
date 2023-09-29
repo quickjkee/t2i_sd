@@ -138,27 +138,7 @@ class DenoiserSD:
         elif prompt is not None and isinstance(prompt, list):
             batch_size = len(prompt)
 
-        # replace 10% of text prompts with "" for classifier-free guidance
-        # filtered_prompt = []
-        # for p in prompt:
-        #     if random.random() > cfg_prob:
-        #         filtered_prompt.append(p)
-        #     else:
-        #         filtered_prompt.append("")
-
         device = self.pipe._execution_device
-        
-        # 3. Encode input prompt
-        # with torch.no_grad():
-        #     filtered_prompt_embeds = self.pipe._encode_prompt(
-        #         filtered_prompt,
-        #         device,
-        #         1,
-        #         False # do_classifier_free_guidance
-        #     )
-        # here `guidance_scale` is defined analog to the guidance weight `w` of equation (2)
-        # of the Imagen paper: https://arxiv.org/pdf/2205.11487.pdf . `guidance_scale = 1`
-        # corresponds to doing no classifier free guidance.
         do_classifier_free_guidance = guidance_scale > 1.0
 
         with torch.no_grad():
