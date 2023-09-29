@@ -539,6 +539,8 @@ class CMTrainLoop(TrainLoop):
                 all_text_idxs.extend([sample.cpu().numpy() for sample in gathered_text_idxs])
               
             if dist.get_rank() == 0:
+                all_images = np.concatenate(all_images, axis=0)
+                all_text_idxs = np.concatenate(all_text_idxs, axis=0)
                 save_dir = os.path.join(logger.get_dir(), f"samples_{self.global_step}_steps_{num_inference_steps}_ema_{ema_rate}_ref_{num_refining_steps}")
                 os.makedirs(save_dir, exist_ok=True)
                 for image, global_idx in zip(all_images, all_text_idxs):
