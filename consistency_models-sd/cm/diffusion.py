@@ -641,6 +641,9 @@ class DenoiserSD:
                     latents = self.scheduler_step(noise_pred, t, t2, latents)
                 elif scheduler_type == 'DPM':
                     latents = eval_pipe.scheduler.step(noise_pred, t.item(), latents, generator, False)[0]
+                elif scheduler_type == 'single_step':
+                    latents = self.denoise(noise_pred, t, latents)
+                    break
 
                 # call the callback, if provided
                 progress_bar.update()
