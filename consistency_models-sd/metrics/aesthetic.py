@@ -111,7 +111,10 @@ def calculate_reward_given_paths(path_images, path_prompts):
     model = RM.load("ImageReward-v1.0")
     df = pd.read_csv(path_prompts)
     all_text = list(df['caption'])
-    file_names = os.listdir(path_images)
+
+    path = pathlib.Path(path_images)
+    file_names = sorted([file for ext in IMAGE_EXTENSIONS
+                    for file in path.glob('*.{}'.format(ext))])
 
     named_rewards = {}
     rewards = []
@@ -119,7 +122,7 @@ def calculate_reward_given_paths(path_images, path_prompts):
         idx_text = int(file.split('.')[0])
         prompt = all_text[idx_text]
 
-        file_path = f"{path_images}{file}"
+        file_path = file
         reward = model.score(prompt, [file_path])
 
         rewards.append(reward)

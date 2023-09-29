@@ -161,7 +161,7 @@ class TrainLoop:
 
         main_checkpoint = find_resume_checkpoint() or self.resume_checkpoint
         ema_checkpoint = find_ema_checkpoint(main_checkpoint, self.resume_step)
-        print(ema_checkpoint)
+        print(main_checkpoint, ema_checkpoint)
         if ema_checkpoint:
             if dist.get_rank() == 0:
                 logger.log(f"loading EMA from checkpoint: {ema_checkpoint}...")
@@ -610,6 +610,7 @@ def find_ema_checkpoint(main_checkpoint, rate):
         return None
     filename = f"ema_{rate}.pt"
     path = os.path.join(os.path.dirname(main_checkpoint), filename)
+    print(os.path.dirname(main_checkpoint))
     if os.path.exists(path):
         return path
     return None
