@@ -26,7 +26,7 @@ sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 
 # Try load first
 torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
-#model = RM.load("ImageReward-v1.0", device='cuda')
+model = RM.load("ImageReward-v1.0", device='cuda')
 
 for _ in [6]:
     for _ in [0]:
@@ -46,7 +46,7 @@ for _ in [6]:
                                  --lr_anneal_steps 0 \
                                  --teacher_model_path sd-v1-5 \
                                  --ema_rate 0.999,0.9999,0.9999432189950708 \
-                                 --global_batch_size 240 \
+                                 --global_batch_size 200 \
                                  --lr 0.0008 \
                                  --use_fp16 False \
                                  --weight_decay 0.0 \

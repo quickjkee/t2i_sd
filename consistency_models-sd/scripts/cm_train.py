@@ -203,11 +203,11 @@ def main():
         coco_ref_stats_path=args.coco_ref_stats_path,
         inception_path=args.inception_path,
         coco_max_cnt=args.coco_max_cnt
-    ).run_loop()  #.generate_coco(scheduler_refining=scheduler_refining,
-       #             num_inference_steps=args.steps,
-       #             num_refining_steps=args.refining_steps,
-       #             rollback_value=args.rollback_value,
-       #             scheduler_type=args.scheduler_type)
+    ).run_loop() #.generate_coco(scheduler_refining=scheduler_refining,
+      #              num_inference_steps=args.steps,
+      #              num_refining_steps=args.refining_steps,
+      #              rollback_value=args.rollback_value,
+      #              scheduler_type=args.scheduler_type)
 
 def create_argparser():
     defaults = dict(
