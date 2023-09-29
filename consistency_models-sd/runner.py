@@ -51,7 +51,7 @@ for _ in [6]:
                                  --lr 0.0008 \
                                  --use_fp16 False \
                                  --weight_decay 0.0 \
-                                 --save_interval 2000 \
+                                 --save_interval 1000 \
                                  --laion_config configs/laion.yaml \
                                  --weight_schedule uniform \
                                  --coco_max_cnt 5000 \
