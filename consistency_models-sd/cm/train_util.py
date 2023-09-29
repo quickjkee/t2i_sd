@@ -532,7 +532,7 @@ class CMTrainLoop(TrainLoop):
                 gathered_images = [th.zeros_like(local_images) for _ in range(dist.get_world_size())]
                 gathered_text_idxs = [th.zeros_like(local_text_idxs) for _ in range(dist.get_world_size())]
 
-                dist.all_gather(gathered_images, image)  # gather not supported with NCCL
+                dist.all_gather(gathered_images, local_images)  # gather not supported with NCCL
                 dist.all_gather(gathered_text_idxs, local_text_idxs)  # gather not supported with NCCL
 
                 all_images.extend([sample.cpu().numpy() for sample in gathered_images])
