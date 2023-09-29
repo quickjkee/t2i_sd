@@ -8,6 +8,7 @@ from tqdm import tqdm
 import torch as th
 from torch.nn.parallel.distributed import DistributedDataParallel as DDP
 from torch.optim import RAdam
+import shutil
 
 import subprocess
 import numpy as np
@@ -294,20 +295,6 @@ class CMTrainLoop(TrainLoop):
                 for steps in inference_steps:
                     th.cuda.empty_cache()
                     self.generate_coco(num_inference_steps=steps)
-                    if dist.get_rank() == 0:
-                        for ema_rate in self.ema_rate:
-                            samples_dir = os.path.join(
-                                logger.get_dir(), f"samples_{self.global_step}_steps_{steps}_ema_{ema_rate}"
-                            )
-                            fid_score = calculate_fid_given_paths(
-                                [self.coco_ref_stats_path, samples_dir],
-                                inception_path=self.inception_path
-                            )
-                            # rm redundant samples to free disk memory
-                            for image_id in range(32, self.coco_max_cnt, 1):
-                                os.remove(os.path.join(samples_dir, f"{image_id}.jpg"))
-
-                            logger.logkv(f"fid_steps_{steps}_{ema_rate}", fid_score)
                     dist.barrier()
 
             batch = next(self.data)
@@ -544,7 +531,7 @@ class CMTrainLoop(TrainLoop):
                 gathered_images = np.concatenate(
                     [images.cpu().numpy() for images in gathered_images], axis=0
                 )
-                gathered_text_idxs =  np.concatenate(
+                gathered_text_idxs = np.concatenate(
                     [text_idxs.cpu().numpy() for text_idxs in gathered_text_idxs], axis=0
                 )
                 save_dir = os.path.join(logger.get_dir(), f"samples_{self.global_step}_steps_{num_inference_steps}_ema_{ema_rate}_ref_{num_refining_steps}")
@@ -557,6 +544,7 @@ class CMTrainLoop(TrainLoop):
                                 --folder_proxy {save_dir} \
                                 --folder_csv subset_30k.csv',
                                 shell=True)
+                shutil.rmtree(f"{save_dir}")
 
             dist.barrier()
 
