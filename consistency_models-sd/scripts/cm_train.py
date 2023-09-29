@@ -87,8 +87,8 @@ def main():
     if args.scheduler_type == 'DDIM':
         scheduler_refining = DDIMScheduler.from_config(pipe.scheduler.config)
     elif args.scheduler_type == 'DPM':
-        scheduler_refining = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
-        pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+        scheduler_refining = DPMSolverSinglestepScheduler.from_config(pipe.scheduler.config) #DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+        pipe.scheduler = DPMSolverSinglestepScheduler.from_config(pipe.scheduler.config)  #DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
 
     pipe.scheduler.final_alpha_cumprod = th.tensor(1.0) # set boundary condition
     # ^-- Keep this in mind, may be important
