@@ -197,8 +197,7 @@ class DenoiserSD:
             # latents_prev = self.scheduler_step(teacher_noise_pred, t, t2, latents)
             latents_prev = []
             for j, pred in enumerate(teacher_noise_pred):
-                curr_p = self.pipe.scheduler.step(pred, t[j], latents[j], self.generator, False)[0]
-                print(curr_p.size())
+                curr_p = self.pipe.scheduler.step(pred, t[j], latents[j], self.generator, False)[0].unsqueeze(0)
                 latents_prev.append(curr_p)
             latents_prev = torch.stack(latents_prev)
 
