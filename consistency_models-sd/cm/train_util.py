@@ -465,6 +465,12 @@ class CMTrainLoop(TrainLoop):
                 refiner_pipe.unet.load_state_dict(refiner_state_dict)
                 refiner_pipe.scheduler = scheduler_refining
 
+            if num_inference_steps == 50:
+                logger.log(f'Evaluation of the initial diffusion with {num_inference_steps}')
+                params = self.teacher_model_params
+                teacher_state_dict = self.mp_trainer.master_params_to_state_dict(params)
+                self.eval_pipe.unet.load_state_dict(teacher_state_dict)
+
             dist.barrier()
             
             local_images = []
