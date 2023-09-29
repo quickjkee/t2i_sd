@@ -58,7 +58,7 @@ def finalize_consistency_losses(
     distiller,
     distiller_target,
     sigma: torch.Tensor,
-    loss_norm: str = 'l2',
+    loss_norm: str = 'l1',
     weight_schedule: str = 'karras',
     sigma_data: float = 0.5
 ):
@@ -200,7 +200,6 @@ class DenoiserSD:
                 curr_p = self.pipe.scheduler.step(pred, t[j], latents[j], self.generator, False)[0].unsqueeze(0)
                 latents_prev.append(curr_p)
             latents_prev = torch.stack(latents_prev)
-            print(latents_prev.size())
 
             if self.use_fp16:
                 latents_prev = latents_prev.half()
