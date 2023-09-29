@@ -195,7 +195,7 @@ class DenoiserSD:
 
             # compute the previous noisy sample x_t -> x_t-1
             # latents_prev = self.scheduler_step(teacher_noise_pred, t, t2, latents)
-            latents_prev = self.pipe.scheduler.step(teacher_noise_pred, t.item(), latents, self.generator, False)[0]
+            latents_prev = self.pipe.scheduler.step(teacher_noise_pred, t, latents, self.generator, False)[0]
 
             if self.use_fp16:
                 latents_prev = latents_prev.half()
