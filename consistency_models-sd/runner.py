@@ -46,7 +46,7 @@ for _ in [6]:
                                  --lr_anneal_steps 0 \
                                  --teacher_model_path sd-v1-5 \
                                  --ema_rate 0.999,0.9999,0.9999432189950708 \
-                                 --global_batch_size 200 \
+                                 --global_batch_size 160 \
                                  --lr 0.0008 \
                                  --use_fp16 False \
                                  --weight_decay 0.0 \
