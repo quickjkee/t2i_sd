@@ -604,9 +604,6 @@ def find_ema_checkpoint(main_checkpoint, rate):
         return None
     filename = f"ema_{rate}.pt"
     path = os.path.join(os.path.dirname(main_checkpoint), filename)
-    print(os.path.dirname(main_checkpoint))
-    files = os.listdir(os.path.dirname(main_checkpoint))
-    print(files)
     if os.path.exists(path):
         return path
     return None
