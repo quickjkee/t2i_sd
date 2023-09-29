@@ -546,6 +546,7 @@ class CMTrainLoop(TrainLoop):
                 for image, global_idx in zip(all_images, all_text_idxs):
                     ToPILImage()(image).save(os.path.join(save_dir, f"{global_idx}.jpg"))
 
+                th.cuda.empty_cache()
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
                                 --folder {save_dir} \
                                 --folder_proxy {save_dir} \
