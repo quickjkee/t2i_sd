@@ -522,6 +522,7 @@ class CMTrainLoop(TrainLoop):
 
                 for text_idx, global_idx in enumerate(rank_batches_index[cnt]):
                     local_text_idxs.append(global_idx)
+                local_text_idxs = th.tensor(local_text_idxs).to(dist.dev())
 
                 gathered_images = [th.zeros_like(image) for _ in range(dist.get_world_size())]
                 gathered_text_idxs = [th.zeros_like(local_text_idxs) for _ in range(dist.get_world_size())]
