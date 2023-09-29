@@ -289,12 +289,13 @@ class CMTrainLoop(TrainLoop):
         while (self.global_step < self.total_training_steps):
             if (self.global_step == 0 or self.global_step % self.save_interval == 0):
                 # Sample images and compute fid only on the master node
-                inference_steps =[1, 2, 3, 4, 8]
+                inference_steps = [5]
                 if self.global_step == 0:
                    inference_steps.append(self.diffusion.num_timesteps)
                 for steps in inference_steps:
                     th.cuda.empty_cache()
-                    self.generate_coco(num_inference_steps=steps)
+                    self.generate_coco(scheduler_refining=None,
+                                       num_inference_steps=steps)
                     dist.barrier()
 
             batch = next(self.data)

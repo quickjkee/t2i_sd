@@ -148,6 +148,7 @@ class DenoiserSD:
             )
 
         # 4. Sample timesteps uniformly
+        self.pipe.scheduler.num_inference_steps = len(self.scheduler.timesteps)
         self.scheduler.set_timesteps(num_scales, device=device)
         self.scheduler.alphas_cumprod = self.scheduler.alphas_cumprod.to(device) 
         indices = th.randint(
@@ -193,7 +194,9 @@ class DenoiserSD:
                 teacher_noise_pred = teacher_noise_pred_uncond + guidance_scale * (teacher_noise_pred_text - teacher_noise_pred_uncond)
 
             # compute the previous noisy sample x_t -> x_t-1
-            latents_prev = self.scheduler_step(teacher_noise_pred, t, t2, latents)
+            # latents_prev = self.scheduler_step(teacher_noise_pred, t, t2, latents)
+            latents_prev = self.pipe.scheduler.step(teacher_noise_pred, t.item(), latents, self.generator, False)[0]
+
             if self.use_fp16:
                 latents_prev = latents_prev.half()
             
@@ -203,7 +206,7 @@ class DenoiserSD:
             distiller_target_noise_pred = target_model(
                 latent_prev_model_input, #latents_prev,
                 torch.cat([t2] * 2) if do_classifier_free_guidance else t2,
-                encoder_hidden_states=prompt_embeds,#filtered_prompt_embeds,
+                encoder_hidden_states=prompt_embeds, #filtered_prompt_embeds,
                 return_dict=False,
             )[0]
 
