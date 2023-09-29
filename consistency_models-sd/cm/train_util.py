@@ -527,7 +527,7 @@ class CMTrainLoop(TrainLoop):
                     local_text_idxs.append(global_idx)
 
                 local_text_idxs = th.tensor(local_text_idxs).to(dist.dev())
-                local_images = th.tensor(local_images).to(dist.dev())
+                local_images = th.stack(local_images).to(dist.dev())
 
                 gathered_images = [th.zeros_like(local_images) for _ in range(dist.get_world_size())]
                 gathered_text_idxs = [th.zeros_like(local_text_idxs) for _ in range(dist.get_world_size())]
