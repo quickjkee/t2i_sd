@@ -25,8 +25,8 @@ sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/cm')
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 
 # Try load first
-torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
-model = RM.load("ImageReward-v1.0", device='cuda')
+#torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
+#model = RM.load("ImageReward-v1.0", device='cuda')
 
 for _ in [6]:
     for _ in [0]:
