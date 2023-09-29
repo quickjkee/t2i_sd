@@ -123,7 +123,7 @@ def calculate_reward_given_paths(path_images, path_prompts):
         idx_text = int(f.split('.')[0])
         prompt = all_text[idx_text]
 
-        file_path = file
+        file_path = str(file)
         reward = model.score(prompt, [file_path])
 
         rewards.append(reward)
