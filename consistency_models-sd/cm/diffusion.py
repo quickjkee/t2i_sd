@@ -195,7 +195,10 @@ class DenoiserSD:
 
             # compute the previous noisy sample x_t -> x_t-1
             # latents_prev = self.scheduler_step(teacher_noise_pred, t, t2, latents)
-            latents_prev = self.pipe.scheduler.step(teacher_noise_pred, t, latents, self.generator, False)[0]
+            latents_prev = []
+            for j, pred in enumerate(teacher_noise_pred):
+                latents_prev.append(self.pipe.scheduler.step(pred, t[j], latents[j], self.generator, False)[0])
+            latents_prev = torch.stack(latents_prev)
 
             if self.use_fp16:
                 latents_prev = latents_prev.half()

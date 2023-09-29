@@ -24,6 +24,7 @@ from omegaconf import OmegaConf
 from cm.yt.utils import instantiate_from_config
 
 from diffusers import StableDiffusionImg2ImgPipeline, StableDiffusionPipeline, DDIMScheduler, DPMSolverMultistepScheduler
+from diffusers import DPMSolverSinglestepScheduler
 from cm import logger
 from cm.script_util import (
     set_dropout_rate,
