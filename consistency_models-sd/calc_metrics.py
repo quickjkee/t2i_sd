@@ -59,13 +59,16 @@ folder = conf.folder
 folder_csv = conf.folder_csv
 folder_proxy = conf.folder_proxy
 
+
+torch.cuda.empty_cache()
+
 # Not an adaptive case
 if folder == folder_proxy:
-    fid = calculate_fid_given_paths((folder, 'evaluations/fid_stats_mscoco512_val.npz'), 'cuda')
-    print(f'Fid {fid}')
-
     reward = calculate_reward_given_paths(folder, folder_csv)
     print(f'Reward {reward}')
+
+    fid = calculate_fid_given_paths((folder, 'evaluations/fid_stats_mscoco512_val.npz'), 'cuda')
+    print(f'Fid {fid}')
 
 else:
     print(f'Adaptive metric, Proxy {folder_proxy}, original {folder}')

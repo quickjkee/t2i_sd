@@ -608,8 +608,6 @@ def find_ema_checkpoint(main_checkpoint, rate):
         return path
     return None
 
-
-
 def log_loss_dict(diffusion, ts, losses):
     for key, values in losses.items():
         logger.logkv_mean(key, values.mean().item())
