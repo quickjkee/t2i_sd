@@ -473,7 +473,8 @@ class CMTrainLoop(TrainLoop):
 
             dist.barrier()
             
-            local_images = []
+            all_images = []
+            all_text_idxs = []
             local_text_idxs = []
             logger.info(f"Generating coco samples for ema {ema_rate}...")
             rank_batches, rank_batches_index = self.eval_pipe.coco_prompts
@@ -520,29 +521,21 @@ class CMTrainLoop(TrainLoop):
                     )
 
                 for text_idx, global_idx in enumerate(rank_batches_index[cnt]):
-                    img_tensor = th.tensor(np.array(image[text_idx]))
-                    local_images.append(img_tensor)
                     local_text_idxs.append(global_idx)
 
-            local_images = th.stack(local_images).to(dist.dev())
-            local_text_idxs = th.tensor(local_text_idxs).to(dist.dev())
+                gathered_images = [th.zeros_like(image) for _ in range(dist.get_world_size())]
+                gathered_text_idxs = [th.zeros_like(local_text_idxs) for _ in range(dist.get_world_size())]
 
-            gathered_images = [th.zeros_like(local_images) for _ in range(dist.get_world_size())]
-            gathered_text_idxs = [th.zeros_like(local_text_idxs) for _ in range(dist.get_world_size())]
-            
-            dist.all_gather(gathered_images, local_images)  # gather not supported with NCCL
-            dist.all_gather(gathered_text_idxs, local_text_idxs) 
+                dist.all_gather(gathered_images, image)  # gather not supported with NCCL
+                dist.all_gather(gathered_text_idxs, local_text_idxs)  # gather not supported with NCCL
+
+                all_images.extend([sample.cpu().numpy() for sample in gathered_images])
+                all_text_idxs.extend([sample.cpu().numpy() for sample in gathered_text_idxs])
               
             if dist.get_rank() == 0:
-                gathered_images = np.concatenate(
-                    [images.cpu().numpy() for images in gathered_images], axis=0
-                )
-                gathered_text_idxs = np.concatenate(
-                    [text_idxs.cpu().numpy() for text_idxs in gathered_text_idxs], axis=0
-                )
                 save_dir = os.path.join(logger.get_dir(), f"samples_{self.global_step}_steps_{num_inference_steps}_ema_{ema_rate}_ref_{num_refining_steps}")
                 os.makedirs(save_dir, exist_ok=True)
-                for image, global_idx in zip(gathered_images, gathered_text_idxs):
+                for image, global_idx in zip(all_images, all_text_idxs):
                     ToPILImage()(image).save(os.path.join(save_dir, f"{global_idx}.jpg"))
 
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \

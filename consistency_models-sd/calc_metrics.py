@@ -60,7 +60,7 @@ folder_csv = conf.folder_csv
 folder_proxy = conf.folder_proxy
 
 
-torch.cuda.empty_cache()
+#torch.cuda.empty_cache()
 
 # Not an adaptive case
 if folder == folder_proxy:
