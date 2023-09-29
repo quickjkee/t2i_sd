@@ -108,18 +108,19 @@ def calculate_aesthetic_given_paths(paths, max_size):
 
 @torch.no_grad()
 def calculate_reward_given_paths(path_images, path_prompts):
-    model = RM.load("ImageReward-v1.0", device='cpu')
+    model = RM.load("ImageReward-v1.0")
     df = pd.read_csv(path_prompts)
     all_text = list(df['caption'])
 
     path = pathlib.Path(path_images)
     file_names = sorted([file for ext in IMAGE_EXTENSIONS
-                    for file in path.glob('*.{}'.format(ext))])
+                         for file in path.glob('*.{}'.format(ext))])
 
     named_rewards = {}
     rewards = []
     for file in file_names:
-        idx_text = int(file.split('.')[0])
+        f = str(file).split('/')[-1]
+        idx_text = int(f.split('.')[0])
         prompt = all_text[idx_text]
 
         file_path = file
