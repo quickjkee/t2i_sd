@@ -200,7 +200,6 @@ class DenoiserSD:
                 curr_p = self.pipe.scheduler.step(pred, t[j].item(), latents[j], self.generator, False)[0]
                 latents_prev.append(curr_p)
             latents_prev = torch.stack(latents_prev)
-            print(latents_prev.size())
 
             if self.use_fp16:
                 latents_prev = latents_prev.half()
