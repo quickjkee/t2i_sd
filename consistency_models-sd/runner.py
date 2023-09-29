@@ -41,7 +41,7 @@ for _ in [6]:
                                  --start_ema 0.95 \
                                  --scale_mode fixed \
                                  --start_scales 50 \
-                                 --total_training_steps 200 \
+                                 --total_training_steps 1000000 \
                                  --loss_norm l2 \
                                  --lr_anneal_steps 0 \
                                  --teacher_model_path sd-v1-5 \
