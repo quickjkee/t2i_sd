@@ -475,7 +475,6 @@ class CMTrainLoop(TrainLoop):
             
             all_images = []
             all_text_idxs = []
-            local_text_idxs = []
             logger.info(f"Generating coco samples for ema {ema_rate}...")
             rank_batches, rank_batches_index = self.eval_pipe.coco_prompts
             for cnt, mini_batch in enumerate(tqdm(rank_batches, unit='batch', disable=(dist.get_rank() != 0))):
@@ -520,11 +519,17 @@ class CMTrainLoop(TrainLoop):
                         scheduler_type=scheduler_type,
                     )
 
+                local_images = []
+                local_text_idxs = []
                 for text_idx, global_idx in enumerate(rank_batches_index[cnt]):
+                    img_tensor = th.tensor(np.array(image[text_idx]))
+                    local_images.append(img_tensor)
                     local_text_idxs.append(global_idx)
-                local_text_idxs = th.tensor(local_text_idxs).to(dist.dev())
 
-                gathered_images = [th.zeros_like(image) for _ in range(dist.get_world_size())]
+                local_text_idxs = th.tensor(local_text_idxs).to(dist.dev())
+                local_images = th.tensor(local_images).to(dist.dev())
+
+                gathered_images = [th.zeros_like(local_images) for _ in range(dist.get_world_size())]
                 gathered_text_idxs = [th.zeros_like(local_text_idxs) for _ in range(dist.get_world_size())]
 
                 dist.all_gather(gathered_images, image)  # gather not supported with NCCL
