@@ -108,7 +108,7 @@ def calculate_aesthetic_given_paths(paths, max_size):
 
 @torch.no_grad()
 def calculate_reward_given_paths(path_images, path_prompts):
-    model = RM.load("ImageReward-v1.0")
+    model = RM.load("ImageReward-v1.0", device='cpu')
     df = pd.read_csv(path_prompts)
     all_text = list(df['caption'])
 
