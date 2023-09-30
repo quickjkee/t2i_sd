@@ -58,7 +58,7 @@ def finalize_consistency_losses(
     distiller,
     distiller_target,
     sigma: torch.Tensor,
-    loss_norm: str = 'l1',
+    loss_norm: str = 'l2',
     weight_schedule: str = 'karras',
     sigma_data: float = 0.5
 ):

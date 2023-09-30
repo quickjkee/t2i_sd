@@ -438,8 +438,8 @@ class CMTrainLoop(TrainLoop):
                             rollback_value=0.3,
                             scheduler_type='DDIM'):
 
-        prev_state_dict = self.model.state_dict()
-        self.model.eval()
+        #prev_state_dict = self.model.state_dict()
+        #self.model.eval()
 
         timesteps=None
 
@@ -556,8 +556,8 @@ class CMTrainLoop(TrainLoop):
 
             dist.barrier()
 
-        self.model.load_state_dict(prev_state_dict)
-        self.model.train()
+        #self.model.load_state_dict(prev_state_dict)
+        #self.model.train()
 
 def parse_resume_step_from_filename(filename):
     """
