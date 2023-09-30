@@ -37,7 +37,7 @@ for _ in [6]:
                                  --nproc_per_node=8 --master-addr=0.0.0.0:1207 scripts/cm_train.py \
                                  --training_mode consistency_distillation \
                                  --target_ema_mode fixed \
-                                 --dataset coco \
+                                 --dataset laion \
                                  --start_ema 0.95 \
                                  --scale_mode fixed \
                                  --start_scales 50 \
