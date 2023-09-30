@@ -56,6 +56,7 @@ for _ in [6]:
                                  --weight_schedule uniform \
                                  --coco_max_cnt 5000 \
                                  --steps {step} \
+                                 --lr 0.00003 \
                                  --refining_steps {ref_step} \
                                  --coco_path evaluations/coco_subset.csv \
                                  --weight_schedule uniform \
