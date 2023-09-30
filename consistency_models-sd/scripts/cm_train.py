@@ -125,10 +125,10 @@ def main():
     #############
 
     # Train dataset
-    #with open(args.laion_config, "r") as f:
-    #    config = yaml.load(f, Loader=yaml.SafeLoader)
-    #    config = OmegaConf.create(config)
-    #    config['train_dataloader'][0]['params']['batch_size'] = batch_size
+    with open(args.laion_config, "r") as f:
+        config = yaml.load(f, Loader=yaml.SafeLoader)
+        config = OmegaConf.create(config)
+        config['train_dataloader'][0]['params']['batch_size'] = batch_size
 
     if args.dataset == 'laion':
         data = instantiate_from_config(config['train_dataloader'][0])
