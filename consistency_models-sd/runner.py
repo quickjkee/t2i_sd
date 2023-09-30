@@ -50,7 +50,7 @@ for _ in [6]:
                                  --microbatch 10 \
                                  --use_fp16 False \
                                  --weight_decay 0.0 \
-                                 --save_interval 100 \
+                                 --save_interval 1000 \
                                  --laion_config configs/laion.yaml \
                                  --weight_schedule uniform \
                                  --coco_max_cnt 5000 \
@@ -63,7 +63,7 @@ for _ in [6]:
                                  --inception_path evaluations/pt_inception-2015-12-05-6726825d.pth \
                                  --guidance_scale 8.0 \
                                  --rollback_value {rollback_v} \
-                                 --scheduler_type DPM',
+                                 --scheduler_type DDIM',
                                 shell=True)
 
                 print('============================================================================================')
