@@ -48,7 +48,6 @@ for _ in [6]:
                                  --ema_rate 0.999,0.9999,0.9999432189950708 \
                                  --global_batch_size 240 \
                                  --microbatch 10 \
-                                 --lr 0.0008 \
                                  --use_fp16 False \
                                  --weight_decay 0.0 \
                                  --save_interval 1000 \
@@ -64,7 +63,7 @@ for _ in [6]:
                                  --inception_path evaluations/pt_inception-2015-12-05-6726825d.pth \
                                  --guidance_scale 8.0 \
                                  --rollback_value {rollback_v} \
-                                 --scheduler_type DDIM',
+                                 --scheduler_type DPM',
                                 shell=True)
 
                 print('============================================================================================')
