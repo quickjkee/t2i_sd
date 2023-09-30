@@ -50,7 +50,7 @@ for _ in [6]:
                                  --microbatch 10 \
                                  --use_fp16 False \
                                  --weight_decay 0.0 \
-                                 --save_interval 1000 \
+                                 --save_interval 100 \
                                  --laion_config configs/laion.yaml \
                                  --weight_schedule uniform \
                                  --coco_max_cnt 5000 \

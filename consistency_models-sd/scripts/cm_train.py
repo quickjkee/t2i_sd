@@ -1,6 +1,7 @@
 """
 Train a diffusion model on images.
 """
+import copy
 import sys
 import os
 
@@ -96,7 +97,7 @@ def main():
     model = pipe.unet.train()
 
     # Create eval pipe that uses distilled EMA for sampling 
-    eval_pipe = StableDiffusionPipeline(
+    eval_pipe = copy.deepcopy(StableDiffusionPipeline(
         pipe.vae,
         pipe.text_encoder,
         pipe.tokenizer,
@@ -105,7 +106,8 @@ def main():
         None, # safety_checker
         None, # feature_extractor
         requires_safety_checker = False
-    )
+    ))
+    eval_pipe.unet.eval()
 
     logger.log("creating data loader...")
     if args.batch_size == -1:
