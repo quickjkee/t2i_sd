@@ -59,7 +59,7 @@ for _ in [6]:
                                  --refining_steps {ref_step} \
                                  --coco_path evaluations/coco_subset.csv \
                                  --weight_schedule uniform \
-                                 --coco_ref_stats_path evaluations/fid_stats_mscoco512_val.npz \
+                                 --coco_ref_stats_path evaluations/fid_stats_mscoco256_val.npz \
                                  --inception_path evaluations/pt_inception-2015-12-05-6726825d.pth \
                                  --guidance_scale 8.0 \
                                  --rollback_value {rollback_v} \
