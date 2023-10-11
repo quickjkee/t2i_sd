@@ -241,7 +241,7 @@ def create_argparser():
         rollback_value=0.3,
         scheduler_type='DDIM',
         # Eval fid
-        coco_ref_stats_path="evaluations/fid_stats_mscoco256_val.npz",
+        coco_ref_stats_path="evaluations/fid_stats_mscoco512_val.npz",
         inception_path="evaluations/pt_inception-2015-12-05-6726825d.pth"
     )
     defaults.update(cm_train_defaults())

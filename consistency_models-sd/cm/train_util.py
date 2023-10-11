@@ -544,7 +544,7 @@ class CMTrainLoop(TrainLoop):
                 save_dir = os.path.join(logger.get_dir(), f"samples_{self.global_step}_steps_{num_inference_steps}_ema_{ema_rate}_ref_{num_refining_steps}")
                 os.makedirs(save_dir, exist_ok=True)
                 for image, global_idx in zip(all_images, all_text_idxs):
-                    ToPILImage()(image).resize((256, 256)).save(os.path.join(save_dir, f"{global_idx}.jpg"))
+                    ToPILImage()(image).save(os.path.join(save_dir, f"{global_idx}.jpg"))
 
                 th.cuda.empty_cache()
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
