@@ -53,7 +53,7 @@ for _ in [6]:
                                  --save_interval 1000 \
                                  --laion_config configs/laion.yaml \
                                  --weight_schedule uniform \
-                                 --coco_max_cnt 30000 \
+                                 --coco_max_cnt 5000 \
                                  --steps {step} \
                                  --lr 0.00003 \
                                  --refining_steps {ref_step} \
