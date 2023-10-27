@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import argparse
 import sys
-from metrics.aesthetic import calculate_aesthetic_given_paths, calculate_reward_given_paths
+from metrics.aesthetic import calculate_aesthetic_given_paths, calculate_reward_given_paths, calculate_clip_given_paths
 from evaluations.fid_score import calculate_fid_given_paths
 from PIL import Image
 import shutil
@@ -64,7 +64,7 @@ folder_proxy = conf.folder_proxy
 
 # Not an adaptive case
 if folder == folder_proxy:
-    reward = calculate_reward_given_paths(folder, folder_csv)
+    reward = calculate_clip_given_paths(folder, folder_csv)
 
     #fid = calculate_fid_given_paths((folder, 'evaluations/fid_stats_mscoco512_val.npz'), 'cuda')
     #print(f'Fid {fid}')

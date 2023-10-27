@@ -8,6 +8,7 @@ import clip
 import pathlib
 import numpy as np
 import ImageReward as RM
+import open_clip
 import pandas as pd
 
 from PIL import Image, ImageFile
@@ -125,6 +126,41 @@ def calculate_reward_given_paths(path_images, path_prompts):
 
         file_path = str(file)
         reward = model.score(prompt, [file_path])
+
+        rewards.append(reward)
+        named_rewards[file_path] = reward
+
+    print(f'Mean reward {np.mean(rewards)} for {path_images}')
+
+    return named_rewards
+
+@torch.no_grad()
+def calculate_clip_given_paths(path_images, path_prompts):
+    model, _, preprocess = open_clip.create_model_and_transforms('ViT-B-32', pretrained='laion2b_s34b_b79k')
+    tokenizer = open_clip.get_tokenizer('ViT-B-32')
+    df = pd.read_csv(path_prompts)
+    all_text = list(df['caption'])
+
+    path = pathlib.Path(path_images)
+    file_names = sorted([file for ext in IMAGE_EXTENSIONS
+                         for file in path.glob('*.{}'.format(ext))])
+
+    named_rewards = {}
+    rewards = []
+    for file in file_names:
+        f = str(file).split('/')[-1]
+        idx_text = int(f.split('.')[0])
+
+        prompt = tokenizer(all_text[idx_text])
+        file_path = str(file)
+
+        image = preprocess(Image.open(file_path)).unsqueeze(0)
+        image_features = model.encode_image(image)
+        text_features = model.encode_text(prompt)
+        image_features /= image_features.norm(dim=-1, keepdim=True)
+        text_features /= text_features.norm(dim=-1, keepdim=True)
+
+        reward = (image_features.squeeze() * text_features.squeeze()).sum().item()
 
         rewards.append(reward)
         named_rewards[file_path] = reward
