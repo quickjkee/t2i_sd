@@ -72,7 +72,7 @@ for _ in [6]:
                     save_dir = os.path.join(LOG_PATH,
                                             f"samples_{1}_steps_{step}_ema_{rate}_ref_{ref_step}")
 
-                    if rollback_v == 0:
+                    if rollback_v == 0.0:
                         proxy_dir = save_dir
                     else:
                         proxy_dir = os.path.join(LOG_PATH,
