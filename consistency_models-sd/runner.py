@@ -31,7 +31,7 @@ sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 for _ in [6]:
     for _ in [0]:
         for _ in [0.5]:
-            for (step, ref_step, rollback_v) in [(4, 0, 0.0), (5, 0, 0.0), (6, 0, 0.0), (8, 0, 0.0)]:
+            for (step, ref_step, rollback_v) in [(5, 0, 0.0), (5, 5, 0.5)]:
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
                                  --nproc_per_node=8 --master-addr=0.0.0.0:1207 scripts/cm_train.py \
@@ -63,8 +63,24 @@ for _ in [6]:
                                  --inception_path evaluations/pt_inception-2015-12-05-6726825d.pth \
                                  --guidance_scale 8.0 \
                                  --rollback_value {rollback_v} \
-                                 --scheduler_type DDIM',
+                                 --scheduler_type DPM',
                                 shell=True)
+
+                for rate in [0.999, 0.9999, 0.9999432189950708]:
+                    save_dir = os.path.join(LOG_PATH,
+                                            f"samples_{1}_steps_{step}_ema_{rate}_ref_{ref_step}")
+
+                    if rollback_v == 0:
+                        proxy_dir = save_dir
+                    else:
+                        proxy_dir = os.path.join(LOG_PATH,
+                                                 f"samples_{1}_steps_{step}_ema_{rate}_ref_{0}")
+
+                    subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
+                                    --folder {save_dir} \
+                                    --folder_proxy {proxy_dir} \
+                                    --folder_csv subset_30k.csv',
+                                    shell=True)
 
                 print('============================================================================================')
                 print('============================================================================================')
