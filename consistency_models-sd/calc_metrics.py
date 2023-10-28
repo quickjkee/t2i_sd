@@ -19,8 +19,7 @@ def mover(folder_proxy, reward_proxy, folder, percentile):
     # percentile - [0, 1]
 
     # Configuration
-    path_root = folder_proxy.split('/')[0]
-    outdir = f'{path_root}/refining_{percentile}'
+    outdir = f'refining_{percentile}'
     if os.path.isdir(outdir):
         shutil.rmtree(outdir)
     total_size = len(reward_proxy)
