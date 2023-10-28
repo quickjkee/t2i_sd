@@ -137,6 +137,7 @@ def calculate_reward_given_paths(path_images, path_prompts):
 @torch.no_grad()
 def calculate_clip_given_paths(path_images, path_prompts):
     model, _, preprocess = open_clip.create_model_and_transforms('ViT-B-32', pretrained='laion2b_s34b_b79k')
+    model = model.to('cuda')
     tokenizer = open_clip.get_tokenizer('ViT-B-32')
     df = pd.read_csv(path_prompts)
     all_text = list(df['caption'])
@@ -154,7 +155,7 @@ def calculate_clip_given_paths(path_images, path_prompts):
         prompt = tokenizer(all_text[idx_text])
         file_path = str(file)
 
-        image = preprocess(Image.open(file_path)).unsqueeze(0)
+        image = preprocess(Image.open(file_path)).unsqueeze(0).to('cuda')
         image_features = model.encode_image(image)
         text_features = model.encode_text(prompt)
         image_features /= image_features.norm(dim=-1, keepdim=True)
