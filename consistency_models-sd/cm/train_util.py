@@ -479,10 +479,10 @@ class CMTrainLoop(TrainLoop):
             rank_batches, rank_batches_index = self.eval_pipe.coco_prompts
             for cnt, mini_batch in enumerate(tqdm(rank_batches, unit='batch', disable=(dist.get_rank() != 0))):
                 text = list(mini_batch)
-                if num_inference_steps in [1, 50]:
+                if num_inference_steps: #in [1, 50]:
                     if scheduler_type == 'DDIM':
                         image = self.diffusion.sample_with_my_step(
-                            self.eval_pipe,
+                            refiner_pipe,
                             text,
                             generator=generator,
                             num_inference_steps=num_inference_steps,
