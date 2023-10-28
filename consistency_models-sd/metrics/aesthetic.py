@@ -152,7 +152,7 @@ def calculate_clip_given_paths(path_images, path_prompts):
         f = str(file).split('/')[-1]
         idx_text = int(f.split('.')[0])
 
-        prompt = tokenizer(all_text[idx_text])
+        prompt = tokenizer(all_text[idx_text]).to('cuda')
         file_path = str(file)
 
         image = preprocess(Image.open(file_path)).unsqueeze(0).to('cuda')
