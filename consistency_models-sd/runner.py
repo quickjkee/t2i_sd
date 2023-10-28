@@ -52,7 +52,7 @@ for _ in [6]:
                                  --loss_norm l2 \
                                  --lr_anneal_steps 0 \
                                  --teacher_model_path sd-v1-5 \
-                                 --ema_rate 0.999,0.9999,0.9999432189950708 \
+                                 --ema_rate 0.9999 \
                                  --global_batch_size 240 \
                                  --microbatch 10 \
                                  --use_fp16 False \
@@ -73,7 +73,7 @@ for _ in [6]:
                                  --scheduler_type DPM',
                                 shell=True)
 
-                for rate in [0.999, 0.9999, 0.9999432189950708]:
+                for rate in [0.9999]:
                     save_dir = os.path.join(LOG_PATH,
                                             f"samples_{1}_steps_{step}_ema_{rate}_ref_{ref_step}")
 
