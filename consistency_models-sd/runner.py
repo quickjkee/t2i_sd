@@ -31,10 +31,13 @@ sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 for _ in [6]:
     for _ in [0]:
         for _ in [0.5]:
-            for (step, ref_step, rollback_v) in [(20, 0, 0.0),
-                                                 (30, 0, 0.0),
-                                                 (40, 0, 0.0),
-                                                 (50, 0, 0.0)]:
+            for (step, ref_step, rollback_v) in [(5, 0, 0.0),
+                                                 (5, 5, 0.0),
+                                                 (5, 10, 0.55),
+                                                 (5, 15, 0.7),
+                                                 (5, 25, 0.7),
+                                                 (5, 35, 0.7),
+                                                 (5, 45, 0.7)]:
 
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
@@ -67,7 +70,7 @@ for _ in [6]:
                                  --inception_path evaluations/pt_inception-2015-12-05-6726825d.pth \
                                  --guidance_scale 8.0 \
                                  --rollback_value {rollback_v} \
-                                 --scheduler_type DPM',
+                                 --scheduler_type DDIM',
                                 shell=True)
 
                 for rate in [0.9999]:
