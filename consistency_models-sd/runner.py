@@ -32,12 +32,34 @@ for _ in [6]:
     for _ in [0]:
         for _ in [0.5]:
             for (step, ref_step, rollback_v) in [(3, 0, 0.0),
-                                                 (3, 5, 0.1),
-                                                 (3, 10, 0.45),
+                                                 (3, 5, 0.2),
+                                                 (3, 5, 0.3),
+                                                 (3, 5, 0.4),
+                                                 (3, 5, 0.5),
+                                                 (3, 5, 0.6),
+                                                 (3, 5, 0.7),
+                                                 (3, 5, 0.75),
+                                                 (3, 5, 0.8),
+                                                 (3, 5, 0.85), #
+                                                 (3, 10, 0.4),
+                                                 (3, 10, 0.5),
+                                                 (3, 10, 0.55),
+                                                 (3, 10, 0.6),
+                                                 (3, 10, 0.65),
+                                                 (3, 10, 0.7),
+                                                 (3, 10, 0.75),
+                                                 (3, 10, 0.8),
+                                                 (3, 10, 0.85), #
+                                                 (3, 15, 0.4),
+                                                 (3, 15, 0.5),
+                                                 (3, 15, 0.55),
                                                  (3, 15, 0.6),
-                                                 (3, 25, 0.6),
-                                                 (3, 35, 0.55),
-                                                 (3, 45, 0.55)]:
+                                                 (3, 15, 0.65),
+                                                 (3, 15, 0.7),
+                                                 (3, 15, 0.75),
+                                                 (3, 15, 0.8),
+                                                 (3, 15, 0.85),  #
+                                                 ]:
 
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
@@ -70,7 +92,7 @@ for _ in [6]:
                                  --inception_path evaluations/pt_inception-2015-12-05-6726825d.pth \
                                  --guidance_scale 8.0 \
                                  --rollback_value {rollback_v} \
-                                 --scheduler_type DDIM',
+                                 --scheduler_type DPM',
                                 shell=True)
 
                 for rate in [0.9999]:
