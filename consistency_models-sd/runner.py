@@ -32,12 +32,16 @@ for _ in [6]:
     for _ in [0]:
         for _ in [0.5]:
             for (step, ref_step, rollback_v) in [(5, 0, 0.0),
-                                                 (5, 5, 0.1),
-                                                 (5, 10, 0.45),
-                                                 (5, 15, 0.6),
-                                                 (5, 25, 0.6),
-                                                 (5, 35, 0.55),
-                                                 (5, 45, 0.55)]:
+                                                 (3, 0, 0.0),
+                                                 (4, 0, 0.0),
+                                                 (6, 0, 0.0),
+                                                 (7, 0, 0.0)]:
+                                                # (5, 5, 0.1),
+                                                # (5, 10, 0.45),
+                                                # (5, 15, 0.6),
+                                                # (5, 25, 0.6),
+                                                # (5, 35, 0.55),
+                                                # (5, 45, 0.55)]:
 
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
@@ -52,7 +56,7 @@ for _ in [6]:
                                  --loss_norm l2 \
                                  --lr_anneal_steps 0 \
                                  --teacher_model_path sd-v1-5 \
-                                 --ema_rate 0.9999 \
+                                 --ema_rate 0.9999, 0.999, 0.9999432189950708  \
                                  --global_batch_size 240 \
                                  --microbatch 10 \
                                  --use_fp16 False \
@@ -73,7 +77,7 @@ for _ in [6]:
                                  --scheduler_type DPM',
                                 shell=True)
 
-                for rate in [0.9999]:
+                for rate in [0.9999, 0.999, 0.9999432189950708]:
                     save_dir = os.path.join(LOG_PATH,
                                             f"samples_{1}_steps_{step}_ema_{rate}_ref_{ref_step}")
 
