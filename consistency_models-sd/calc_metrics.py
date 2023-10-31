@@ -70,7 +70,7 @@ if folder == folder_proxy:
 
 else:
     print(f'Adaptive metric, Proxy {folder_proxy}, original {folder}')
-    reward_proxy = calculate_clip_given_paths(folder_proxy, folder_csv)
+    reward_proxy = calculate_reward_given_paths(folder_proxy, folder_csv)
 
     for perc in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]:
         folder_adaptive = mover(folder_proxy, reward_proxy, folder, percentile=perc)
