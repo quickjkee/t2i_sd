@@ -33,7 +33,11 @@ for _ in [6]:
         for _ in [0.5]:
             for (step, ref_step, rollback_v) in [(5, 0, 0.0),
                                                  (10, 0, 0.0),
-                                                 (25, 0, 0.0)]:
+                                                 (15, 0, 0.0),
+                                                 (20, 0, 0.0),
+                                                 (30, 0, 0.0),
+                                                 (40, 0, 0.0),
+                                                 (50, 0, 0.0)]:
 
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
                 subprocess.call(f'CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m torch.distributed.run --standalone \
