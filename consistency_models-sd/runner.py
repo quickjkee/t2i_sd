@@ -70,7 +70,7 @@ for _ in [6]:
                                  --inception_path evaluations/pt_inception-2015-12-05-6726825d.pth \
                                  --guidance_scale 8.0 \
                                  --rollback_value {rollback_v} \
-                                 --scheduler_type DDIM',
+                                 --scheduler_type DPM',
                                 shell=True)
 
                 for rate in [0.9999]:
