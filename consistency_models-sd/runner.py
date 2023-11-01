@@ -28,10 +28,8 @@ sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 #torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
 #model = RM.load("ImageReward-v1.0", device='cuda')
 
-for _ in [6]:
-    for _ in [0]:
-        for _ in [0.5]:
-            for (step, ref_step, rollback_v) in [(3, 0, 0.0),
+"""
+(3, 0, 0.0),
                                                  (3, 5, 0.2),
                                                  (3, 5, 0.3),
                                                  (3, 5, 0.4),
@@ -59,6 +57,18 @@ for _ in [6]:
                                                  (3, 15, 0.75),
                                                  (3, 15, 0.8),
                                                  (3, 15, 0.85),
+"""
+
+for _ in [6]:
+    for _ in [0]:
+        for _ in [0.5]:
+            for (step, ref_step, rollback_v) in [(5, 0, 0.0),
+                                                 (10, 0, 0.0),
+                                                 (15, 0, 0.0),
+                                                 (20, 0, 0.0),
+                                                 (30, 0, 0.0),
+                                                 (40, 0, 0.0),
+                                                 (50, 0, 0.0),
                                                  ]:
 
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
