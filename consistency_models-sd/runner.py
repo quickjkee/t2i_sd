@@ -24,41 +24,6 @@ sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd')
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/cm')
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 
-# Try load first
-#torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14')
-#model = RM.load("ImageReward-v1.0", device='cuda')
-
-"""
-(3, 0, 0.0),
-                                                 (3, 5, 0.2),
-                                                 (3, 5, 0.3),
-                                                 (3, 5, 0.4),
-                                                 (3, 5, 0.5),
-                                                 (3, 5, 0.6),
-                                                 (3, 5, 0.7),
-                                                 (3, 5, 0.75),
-                                                 (3, 5, 0.8),
-                                                 (3, 5, 0.85), #
-                                                 (3, 10, 0.4),
-                                                 (3, 10, 0.5),
-                                                 (3, 10, 0.55),
-                                                 (3, 10, 0.6),
-                                                 (3, 10, 0.65),
-                                                 (3, 10, 0.7),
-                                                 (3, 10, 0.75),
-                                                 (3, 10, 0.8),
-                                                 (3, 10, 0.85), #
-                                                 (3, 15, 0.4),
-                                                 (3, 15, 0.5),
-                                                 (3, 15, 0.55),
-                                                 (3, 15, 0.6),
-                                                 (3, 15, 0.65),
-                                                 (3, 15, 0.7),
-                                                 (3, 15, 0.75),
-                                                 (3, 15, 0.8),
-                                                 (3, 15, 0.85),
-"""
-
 for _ in [6]:
     for _ in [0]:
         for _ in [0.5]:
