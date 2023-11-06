@@ -28,12 +28,7 @@ for _ in [6]:
     for _ in [0]:
         for _ in [0.5]:
             for (step, ref_step, rollback_v) in [(5, 0, 0.0),
-                                                 (10, 0, 0.0),
-                                                 (15, 0, 0.0),
-                                                 (20, 0, 0.0),
-                                                 (30, 0, 0.0),
-                                                 (40, 0, 0.0),
-                                                 (50, 0, 0.0)
+                                                 (5, 0, 0.0)
                                                  ]:
 
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
@@ -67,7 +62,7 @@ for _ in [6]:
                                  --inception_path evaluations/pt_inception-2015-12-05-6726825d.pth \
                                  --guidance_scale 8.0 \
                                  --rollback_value {rollback_v} \
-                                 --scheduler_type DPM',
+                                 --scheduler_type DDIM',
                                 shell=True)
 
                 for rate in [0.9999]:
