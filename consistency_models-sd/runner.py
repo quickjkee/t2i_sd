@@ -27,13 +27,39 @@ sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 for _ in [6]:
     for _ in [0]:
         for _ in [0.5]:
-            for (step, ref_step, rollback_v) in [(5, 0, 0.0),
-                                                 (5, 5, 0.981),
-                                                 (5, 10, 0.981),
-                                                 (5, 15, 0.981),
-                                                 (5, 25, 0.981),
-                                                 (5, 35, 0.981),
-                                                 (5, 45, 0.981),
+            for (step, ref_step, rollback_v) in [(3, 0, 0.0),
+                                                 (3, 5, 0.2),
+                                                 (3, 5, 0.25),
+                                                 (3, 5, 0.3),
+                                                 (3, 5, 0.35),
+                                                 (3, 5, 0.4),
+                                                 (3, 5, 0.45),
+                                                 (3, 5, 0.5),
+                                                 (3, 5, 0.55),
+                                                 (3, 5, 0.6),
+                                                 (3, 5, 0.65),
+                                                 (3, 5, 0.7),
+                                                 (3, 5, 0.75),
+                                                 (3, 5, 0.8),
+                                                 (3, 5, 0.85), #
+                                                 (3, 10, 0.4),
+                                                 (3, 10, 0.5),
+                                                 (3, 10, 0.55),
+                                                 (3, 10, 0.6),
+                                                 (3, 10, 0.65),
+                                                 (3, 10, 0.7),
+                                                 (3, 10, 0.75),
+                                                 (3, 10, 0.8),
+                                                 (3, 10, 0.85), #
+                                                 (3, 15, 0.4),
+                                                 (3, 15, 0.5),
+                                                 (3, 15, 0.55),
+                                                 (3, 15, 0.6),
+                                                 (3, 15, 0.65),
+                                                 (3, 15, 0.7),
+                                                 (3, 15, 0.75),
+                                                 (3, 15, 0.8),
+                                                 (3, 15, 0.85),
                                                  ]:
 
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
@@ -67,7 +93,7 @@ for _ in [6]:
                                  --inception_path evaluations/pt_inception-2015-12-05-6726825d.pth \
                                  --guidance_scale 8.0 \
                                  --rollback_value {rollback_v} \
-                                 --scheduler_type DPM',
+                                 --scheduler_type DDIM',
                                 shell=True)
 
                 for rate in [0.9999]:
