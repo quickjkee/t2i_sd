@@ -65,9 +65,6 @@ folder_proxy = conf.folder_proxy
 if folder == folder_proxy:
     reward = calculate_reward_given_paths(folder, folder_csv)
 
-    fid = calculate_reward_given_paths((folder, 'evaluations/fid_stats_mscoco256_val.npz'), 'cuda')
-    print(f'Fid {fid}')
-
 else:
     print(f'Adaptive metric, Proxy {folder_proxy}, original {folder}')
     reward_proxy = calculate_reward_given_paths(folder_proxy, folder_csv)
