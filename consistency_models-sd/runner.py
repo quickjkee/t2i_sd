@@ -24,16 +24,31 @@ sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd')
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/cm')
 sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 
+
 for _ in [6]:
     for _ in [0]:
         for _ in [0.5]:
-            for (step, ref_step, rollback_v) in [(5, 0, 0.0),
-                                                 (5, 5, 0.99),
-                                                 (5, 10, 0.99),
-                                                 (5, 15, 0.99),
-                                                 (5, 25, 0.99),
-                                                 (5, 35, 0.99),
-                                                 (5, 45, 0.99),
+            for (step, ref_step, rollback_v) in [(3, 0, 0.0),
+                                                 (3, 25, 0.4),
+                                                 (3, 25, 0.5),
+                                                 (3, 25, 0.55),
+                                                 (3, 25, 0.6),
+                                                 (3, 25, 0.65),
+                                                 (3, 25, 0.7),
+                                                 (3, 25, 0.75),
+                                                 (3, 25, 0.8),
+                                                 (3, 25, 0.85),  #
+                                                 (3, 25, 0.981),  #
+                                                 (3, 35, 0.4),
+                                                 (3, 35, 0.5),
+                                                 (3, 35, 0.55),
+                                                 (3, 35, 0.6),
+                                                 (3, 35, 0.65),
+                                                 (3, 35, 0.7),
+                                                 (3, 35, 0.75),
+                                                 (3, 35, 0.8),
+                                                 (3, 35, 0.85),  #
+                                                 (3, 35, 0.981),
                                                  ]:
 
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
