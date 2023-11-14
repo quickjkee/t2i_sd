@@ -74,7 +74,6 @@ else:
 
     for perc in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]:
         folder_adaptive = mover(folder_proxy, reward_proxy, folder, percentile=perc)
-        reward = calculate_clip_given_paths(f'{folder_adaptive}', folder_csv)
         calculate_reward_given_paths(folder_adaptive, folder_csv)
         #fid = calculate_fid_given_paths((folder_adaptive, 'evaluations/fid_stats_mscoco256_val.npz'), 'cuda')
         #print(f'Fid {fid}')
