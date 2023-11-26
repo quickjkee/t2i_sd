@@ -89,7 +89,7 @@ for _ in [6]:
                     names = os.listdir(save_dir)
                     all_imgs = []
                     for name in names:
-                        img = np.array(Image.open(f'{save_dir}/{name}').convert('RGB'))
+                        img = np.array(Image.open(f'{save_dir}/{name}').convert('RGB').resize((512, 512)))
                         img = np.squeeze(img, 0)
                         all_imgs.append(img)
                     arr = np.concatenate(all_imgs, axis=0)
@@ -98,7 +98,7 @@ for _ in [6]:
                     names = os.listdir('train2014')
                     all_imgs = []
                     for name in names:
-                        img = np.array(Image.open(f'train2014/{name}').convert('RGB'))
+                        img = np.array(Image.open(f'train2014/{name}').convert('RGB').resize((512, 512)))
                         img = np.squeeze(img, 0)
                         all_imgs.append(img)
                     arr = np.concatenate(all_imgs, axis=0)
