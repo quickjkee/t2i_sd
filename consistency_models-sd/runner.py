@@ -31,7 +31,8 @@ sys.path.append(f'{SOURCE_CODE_PATH}/code/consistency_models-sd/metrics')
 for _ in [6]:
     for _ in [0]:
         for _ in [0.5]:
-            for (step, ref_step, rollback_v) in [(5, 0, 0.0)
+            for (step, ref_step, rollback_v) in [(5, 0, 0.0),
+                                                 (50, 0, 0.0)
                                                  ]:
 
                 print(f'GENERATION WITH CD STEPS {step}, REF STEPS {ref_step}, ROLLBACK V {rollback_v}')
