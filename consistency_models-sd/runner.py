@@ -4,6 +4,9 @@ import nirvana_dl
 import torch
 import sys
 import ImageReward as RM
+import numpy as np
+
+from PIL import Image
 
 # Utils
 # ----------------------------------------------------------
@@ -75,11 +78,36 @@ for _ in [6]:
                         proxy_dir = os.path.join(LOG_PATH,
                                                  f"samples_{1}_steps_{step}_ema_{rate}_ref_{0}")
 
-                    subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
-                                    --folder {save_dir} \
-                                    --folder_proxy {proxy_dir} \
-                                    --folder_csv subset_30k.csv',
+                    #subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 calc_metrics.py \
+                    #                --folder {save_dir} \
+                    #                --folder_proxy {proxy_dir} \
+                    #                --folder_csv subset_30k.csv',
+                    #                shell=True)
+
+                    # DELETE FURTHER
+                    ####
+                    names = os.listdir(save_dir)
+                    all_imgs = []
+                    for name in names:
+                        img = np.array(Image.open(f'{save_dir}/{name}').convert('RGB'))
+                        img = np.squeeze(img, 0)
+                        all_imgs.append(img)
+                    arr = np.concatenate(all_imgs, axis=0)
+                    np.savez('gavno', arr)
+
+                    names = os.listdir('train2014')
+                    all_imgs = []
+                    for name in names:
+                        img = np.array(Image.open(f'train2014/{name}').convert('RGB'))
+                        img = np.squeeze(img, 0)
+                        all_imgs.append(img)
+                    arr = np.concatenate(all_imgs, axis=0)
+                    np.savez('gavno2', arr)
+
+                    subprocess.call(f'CUDA_VISIBLE_DEVICES=0 python3 guided-diffusion-main/evaluations/evaluator.py \
+                                    gavno.npz gavno2.npz',
                                     shell=True)
+
 
                 print('============================================================================================')
                 print('============================================================================================')
