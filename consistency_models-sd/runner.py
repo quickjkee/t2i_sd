@@ -89,8 +89,8 @@ for _ in [6]:
                     names = os.listdir(save_dir)
                     all_imgs = []
                     for name in names:
-                        img = np.array(Image.open(f'{save_dir}/{name}').convert('RGB').resize((512, 512)))
-                        img = np.unsqueeze(img, 0)
+                        img = torch.tensor(np.array(Image.open(f'{save_dir}/{name}').convert('RGB').resize((512, 512))))
+                        img = img.unsqueeze(0)
                         all_imgs.append(img)
                     arr = np.concatenate(all_imgs, axis=0)
                     np.savez('gavno', arr)
@@ -98,8 +98,8 @@ for _ in [6]:
                     names = os.listdir('train2014')
                     all_imgs = []
                     for name in names:
-                        img = np.array(Image.open(f'train2014/{name}').convert('RGB').resize((512, 512)))
-                        img = np.unsqueeze(img, 0)
+                        img = torch.tensor(np.array(Image.open(f'train2014/{name}').convert('RGB').resize((512, 512))))
+                        img = img.unsqueeze(0)
                         all_imgs.append(img)
                     arr = np.concatenate(all_imgs, axis=0)
                     np.savez('gavno2', arr)
