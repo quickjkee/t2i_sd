@@ -131,6 +131,7 @@ def calculate_reward_given_paths(path_images, path_prompts):
         named_rewards[file_path] = reward
 
     print(f'Mean reward {np.mean(rewards)} for {path_images}')
+
     return named_rewards
 
 @torch.no_grad()
